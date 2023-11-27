@@ -2,7 +2,7 @@
 #include <Utils.h>
 #include <ShaderProgram.h>
 
-// конфиг
+// TODO config
 #define DEBUG 1
 
 /* vertices within Normalized Device Coordinates (NDC) range
@@ -42,6 +42,7 @@ int main(int argc, char* argv[])
     GLFWwindow* window = createWindow("ENginger");
     GLuint ModelVAO = CreateVertexArrayObject(vertices, indices);
     GLuint shaderProgram = CreateShaderProgram(resourcesPath, "vertexShader.glsl", "fragmentShader.glsl");
+    glUseProgram(shaderProgram);
     /* Frame */
     while (!glfwWindowShouldClose(window))
     {

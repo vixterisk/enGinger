@@ -35,9 +35,14 @@ GLuint CreateShaderProgram(const char* vertexShaderSource, const char* fragmentS
 	unsigned int vertexShader = CreateShader(GL_VERTEX_SHADER, vertexShaderSource);
 	unsigned int fragmentShader = CreateShader(GL_FRAGMENT_SHADER, fragmentShaderSource);
 	unsigned int shaderProgram;
+	/* create shader program object and get its ID */
 	shaderProgram = glCreateProgram();
+	/* any number of shader objects can be attached at once as long as they have a different shader type. */
 	glAttachShader(shaderProgram, vertexShader);
 	glAttachShader(shaderProgram, fragmentShader);
+	/* This step puts all shaders together and matches each output to each input. 
+	The status of the link operation will be stored as part of the program object's state (GL_LINK_STATUS), and can fail for a number of reasons
+	https://registry.khronos.org/OpenGL-Refpages/gl4/html/glLinkProgram.xhtml */
 	glLinkProgram(shaderProgram);
 
 	int  success;
@@ -47,7 +52,8 @@ GLuint CreateShaderProgram(const char* vertexShaderSource, const char* fragmentS
 		glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
 		std::cout << "::Error: shader program compilation failed\n" << infoLog << std::endl;
 	}
-	glUseProgram(shaderProgram);
+	glDetachShader(shaderProgram, vertexShader);
+	glDetachShader(shaderProgram, fragmentShader);
 	glDeleteShader(vertexShader);
 	glDeleteShader(fragmentShader);
 	return shaderProgram;
@@ -79,7 +85,7 @@ GLuint CreateShaderProgram(std::string resourcesPath, std::string vertexShaderNa
 	const char* vertexShaderSource = readShaderFromFile(resourcesPath, vertexShaderName);
 	const char* fragmentShaderSource = readShaderFromFile(resourcesPath, fragmentShaderName);
 	GLuint shaderProgram = CreateShaderProgram(vertexShaderSource, fragmentShaderSource);
-//	delete vertexShaderSource;
+//	delete vertexShaderSource; онвелс
 //	delete fragmentShaderSource;
 	return shaderProgram;
 }
