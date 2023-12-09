@@ -59,14 +59,12 @@ GLuint CreateShaderProgram(const char* vertexShaderSource, const char* fragmentS
 	return shaderProgram;
 }
 
-/* reads shader source code from file, located in '$resourcesPath/shaders/shaderName' */
-const char* readShaderFromFile(std::string resourcesPath, std::string shaderName)
+const char* readShaderFromFile(std::string shaderPath)
 {
-	std::string fullFilePath = resourcesPath.append("\\shaders\\").append(shaderName);
-	std::ifstream file(fullFilePath);
+	std::ifstream file(shaderPath);
 	if (!file) {
-		std::cout << "::Error: " << strerror(errno);
-		return 0;
+		std::cout << "::Error: shader file reading failed. " << strerror(errno);
+		exit(1);
 	}
 	std::stringstream buffer;
 	buffer << file.rdbuf();
@@ -78,12 +76,12 @@ const char* readShaderFromFile(std::string resourcesPath, std::string shaderName
 	return result;
 }
 
-/* Reads vertex shader located in 'resourcesPath/shaders/vertexShaderName' 
-and fragment shader located in 'resourcesPath/shaders/fragmentShaderName', then creates shader program from these shaders */
-GLuint CreateShaderProgram(std::string resourcesPath, std::string vertexShaderName, std::string fragmentShaderName)
+/* Reads vertex shader located in 'resources/shaders/vertexShaderName' 
+and fragment shader located in 'resourcess/shaders/fragmentShaderName', then creates shader program from these shaders */
+GLuint CreateShaderProgramUsingFile(std::string vertexShaderPath, std::string fragmentShaderPath)
 {
-	const char* vertexShaderSource = readShaderFromFile(resourcesPath, vertexShaderName);
-	const char* fragmentShaderSource = readShaderFromFile(resourcesPath, fragmentShaderName);
+	const char* vertexShaderSource = readShaderFromFile(vertexShaderPath);
+	const char* fragmentShaderSource = readShaderFromFile(fragmentShaderPath);
 	GLuint shaderProgram = CreateShaderProgram(vertexShaderSource, fragmentShaderSource);
 //	delete vertexShaderSource; онвелс
 //	delete fragmentShaderSource;

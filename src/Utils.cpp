@@ -52,8 +52,7 @@ GLFWwindow* createWindow(const char* windowName)
     int egl_version = gladLoaderLoadEGL(display);
 #else
 
-    /* GLAD - one of the OpenGL Loading Libraries that load OS-, driver-specific pointers to OpenGL functions at runtime, core as well as extensions.
-    GLFW returns glfwGetProcAddress that defines the correct function based on which OS we're compiling for. */
+    /* GLFW returns glfwGetProcAddress that defines the correct function based on which OS we're compiling for. */
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
     {
         std::cout << "::Failed to initialize GLAD" << std::endl;
@@ -83,7 +82,7 @@ void processInput(GLFWwindow* window)
 configures how OpenGL should interpret the said memory, 
 specifies how to send the data to the graphics card. 
 
-P.S. Sending data to the graphics card from the CPU is relatively slow, so wherever we can we try to send as much data as possible at once.
+P.S. Sending data to the graphics card from the CPU is relatively slow, so whenever is possible it's best to send as much data as possible at once.
 Once the data is in the graphics card's memory the vertex shader has almost instant access to the vertices making it extremely fast.*/
 GLuint CreateVertexArrayObject(std::vector<Point> vertices, std::vector <GLuint> indices)
 {
@@ -138,4 +137,55 @@ void draw(GLuint shaderProgram, GLuint VAO, int ElementsCount)
     /* primitives is an interpretation scheme used by OpenGL to determine what a stream of vertices represents 
     when being rendered e.g. "GL_POINTS" */
     glDrawElements(GL_TRIANGLES, ElementsCount, GL_UNSIGNED_INT, 0);
+}
+
+#define PATHBUFFERSIZE 100
+
+std::string GetSrcPathEnvVar()
+{
+    char srcPath[PATHBUFFERSIZE];
+    const char* engingeSrcPath = "ENGINGER_SRC_PATH";
+
+    if (!getenv(engingeSrcPath))
+    {
+        std::cout << "The environment variable " << engingeSrcPath << " was not found.\n" << std::endl;
+        exit(1);
+    }
+
+    if (snprintf(srcPath, PATHBUFFERSIZE, "%s", getenv(engingeSrcPath)) >= PATHBUFFERSIZE)
+    {
+        std::cout << "Path buffer size of " << PATHBUFFERSIZE << " was too small. Aborting\n" << std::endl;
+        exit(1);
+    }
+    return srcPath;
+}
+
+pathNode* createPath(std::string name, pathNode* parent) {
+    pathNode* newPath = new pathNode();
+    newPath->name = name;
+    newPath->parent = parent;
+    if (parent) parent->children.push_back(newPath);
+    return newPath;
+}
+
+std::string getFullPath(pathNode* path) {
+    std::string parentName = path->parent == NULL ? "" : getFullPath(path->parent) + +"\\";
+    return parentName + path->name;
+}
+
+Path getInitializedPath() {
+    std::string srcPath = GetSrcPathEnvVar();
+    Path path;
+    path.rootPath = createPath(srcPath, NULL);
+    path.resourcesPath = createPath("resources", path.rootPath);
+    path.shadersPath = createPath("shaders", path.resourcesPath);
+    path.vertexShaderPath = NULL;
+    path.fragmentShaderPath = NULL;
+    path.configPath = createPath("config.json", path.rootPath);
+    return path;
+}
+
+void setShadersPath(Path* path, std::string vertexShaderName, std::string fragmentShaderName) {
+    path->vertexShaderPath = createPath(vertexShaderName, path->shadersPath);;
+    path->fragmentShaderPath = createPath(fragmentShaderName, path->shadersPath);;
 }

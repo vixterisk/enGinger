@@ -15,3 +15,25 @@ GLuint CreateVertexArrayObject(std::vector<Point> vertices, std::vector<GLuint> 
 void ClearAllBuffers();
 
 void draw(GLuint shaderProgram, GLuint VAO, int ElementsCount);
+
+struct pathNode {
+    std::string name;
+    pathNode* parent;
+    std::vector<pathNode*> children;
+};
+
+class Path {
+public:
+    pathNode* rootPath;
+    pathNode* resourcesPath;
+    pathNode* shadersPath;
+    pathNode* vertexShaderPath;
+    pathNode* fragmentShaderPath;
+    pathNode* configPath;
+};
+
+std::string getFullPath(pathNode* path);
+
+Path getInitializedPath();
+
+void setShadersPath(Path* path, std::string vertexShaderName, std::string fragmentShaderName);

@@ -2,6 +2,6 @@
 
 #include "Dependencies.h"
 
-GLuint CreateShaderProgram(std::string resourcesPath, std::string vertexShaderName, std::string fragmentShaderName);
+GLuint CreateShaderProgramUsingFile(std::string vertexShaderPath, std::string fragmentShaderPath);
 
 GLuint CreateShaderProgram(const char* vertexShaderSource, const char* fragmentShaderSource);

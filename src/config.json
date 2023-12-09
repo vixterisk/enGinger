@@ -1,3 +1,4 @@
 {
-    "resourcesPath": "C:\\Users\\ermolina\\Desktop\\enGINGER\\src\\resources"
+    "usedVertexShader": "vertexShader.glsl",
+    "usedFragmentShader": "fragmentShader.glsl"
 }

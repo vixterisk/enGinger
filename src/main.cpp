@@ -2,8 +2,6 @@
 #include <Utils.h>
 #include <ShaderProgram.h>
 
-#define CONFIGPATHSIZE 100
-
 /* vertices within Normalized Device Coordinates (NDC) range
 Unlike usual screen coordinates the positive y-axis points in the up-direction and the (0,0) coordinates are at the center of the graph, 
 instead of top-left. Eventually all the (transformed) coordinates should end up in this coordinate space, otherwise they won't be visible. 
@@ -21,37 +19,28 @@ std::vector<GLuint> indices = {
    1, 2, 3
 };
 
-std::string GetResourcesPathString()
-{
-    char path[CONFIGPATHSIZE];
-    char* engingerConfigPath = "ENGINGER_CONFIG_PATH";
-
-    if (!getenv(engingerConfigPath))
-    {
-        std::cout << "The environment variable " << engingerConfigPath << " was not found.\n" << std::endl;
-        exit(1);
-    }
-
-    if (snprintf(path, CONFIGPATHSIZE, "%s", getenv(engingerConfigPath)) >= CONFIGPATHSIZE)
-    {
-        std::cout << "CONFIGPATHSIZE of " << CONFIGPATHSIZE << " was too small. Aborting\n" << std::endl;
-        exit(1);
-    }
-
-    using json = nlohmann::json;
-    std::ifstream f(path);
-    json data = json::parse(f);
-
-    auto stringValue = data["resourcesPath"];
-    return stringValue.template get<std::string>();
-}
-
 int main(int argc, char* argv[])
 {
-    std::string resourcesPath = GetResourcesPathString();
-    GLFWwindow* window = createWindow("ENginger");
+    Path path = getInitializedPath();
+    
+    // reading config.json
+    using json = nlohmann::json;
+    std::string configJson = getFullPath(path.configPath);
+    std::ifstream config(configJson);
+    json data = json::parse(config);
+    nlohmann::json usedVertexShaderValue = data["usedVertexShader"];
+    nlohmann::json usedFragmentShaderValue = data["usedFragmentShader"];
+    std::string vertexShaderName = usedVertexShaderValue.template get<std::string>();
+    std::string fragmentShaderName = usedFragmentShaderValue.template get<std::string>();
+
+    setShadersPath(&path, vertexShaderName, fragmentShaderName);
+    std::string vertexShaderPath = getFullPath(path.vertexShaderPath);
+    std::string fragmentShaderPath = getFullPath(path.fragmentShaderPath);
+
+    GLFWwindow* window = createWindow("enGinger");
     GLuint ModelVAO = CreateVertexArrayObject(vertices, indices);
-    GLuint shaderProgram = CreateShaderProgram(resourcesPath, "vertexShader.glsl", "fragmentShader.glsl");
+    GLuint shaderProgram = CreateShaderProgramUsingFile(vertexShaderPath, fragmentShaderPath);
+
     glUseProgram(shaderProgram);
     /* Frame */
     while (!glfwWindowShouldClose(window))
