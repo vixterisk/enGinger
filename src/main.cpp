@@ -1,5 +1,6 @@
 #include <Dependencies.h>
 #include <Utils.h>
+#include <Path.h>
 #include <ShaderProgram.h>
 
 /* vertices within Normalized Device Coordinates (NDC) range
@@ -21,21 +22,18 @@ std::vector<GLuint> indices = {
 
 int main(int argc, char* argv[])
 {
-    Path path = getInitializedPath();
-    
     // reading config.json
     using json = nlohmann::json;
-    std::string configJson = getFullPath(path.configPath);
+    std::string configJson = getConfigJsonPath();
     std::ifstream config(configJson);
     json data = json::parse(config);
-    nlohmann::json usedVertexShaderValue = data["usedVertexShader"];
-    nlohmann::json usedFragmentShaderValue = data["usedFragmentShader"];
+    nlohmann::json usedVertexShaderValue = data["vertexShader"];
+    nlohmann::json usedFragmentShaderValue = data["fragmentShader"];
     std::string vertexShaderName = usedVertexShaderValue.template get<std::string>();
     std::string fragmentShaderName = usedFragmentShaderValue.template get<std::string>();
 
-    setShadersPath(&path, vertexShaderName, fragmentShaderName);
-    std::string vertexShaderPath = getFullPath(path.vertexShaderPath);
-    std::string fragmentShaderPath = getFullPath(path.fragmentShaderPath);
+    std::string vertexShaderPath = getVertexShaderPath(vertexShaderName);
+    std::string fragmentShaderPath = getFragmentShaderPath(fragmentShaderName);
 
     GLFWwindow* window = createWindow("enGinger");
     GLuint ModelVAO = CreateVertexArrayObject(vertices, indices);

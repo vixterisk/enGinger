@@ -1,4 +1,4 @@
 {
-    "usedVertexShader": "vertexShader.glsl",
-    "usedFragmentShader": "fragmentShader.glsl"
+    "vertexShader": "vertexShader.glsl",
+    "fragmentShader": "fragmentShader.glsl"
 }
