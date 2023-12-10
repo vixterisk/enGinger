@@ -8,6 +8,7 @@ Unlike usual screen coordinates the positive y-axis points in the up-direction a
 instead of top-left. Eventually all the (transformed) coordinates should end up in this coordinate space, otherwise they won't be visible. 
 These coordinates will then be transformed to screen-space coordinates (via the viewport transform). The resulting screen-space coordinates 
 are then transformed to fragments as inputs to fragment shader. */
+
 std::vector<Point> vertices = {
    { 0.5f, 0.5f, 0.0f },
    { 0.5f, -0.5f, 0.0f },
@@ -22,21 +23,11 @@ std::vector<GLuint> indices = {
 
 int main(int argc, char* argv[])
 {
-    // reading config.json
-    using json = nlohmann::json;
-    std::string configJson = getConfigJsonPath();
-    std::ifstream config(configJson);
-    json data = json::parse(config);
-    nlohmann::json usedVertexShaderValue = data["vertexShader"];
-    nlohmann::json usedFragmentShaderValue = data["fragmentShader"];
-    std::string vertexShaderName = usedVertexShaderValue.template get<std::string>();
-    std::string fragmentShaderName = usedFragmentShaderValue.template get<std::string>();
-
-    std::string vertexShaderPath = getVertexShaderPath(vertexShaderName);
-    std::string fragmentShaderPath = getFragmentShaderPath(fragmentShaderName);
-
     GLFWwindow* window = createWindow("enGinger");
     GLuint ModelVAO = CreateVertexArrayObject(vertices, indices);
+
+    std::string vertexShaderPath = getShaderAbsolutePath(GL_VERTEX_SHADER, "vertexShader");
+    std::string fragmentShaderPath = getShaderAbsolutePath(GL_FRAGMENT_SHADER, "fragmentShaderYellow");
     GLuint shaderProgram = CreateShaderProgramUsingFile(vertexShaderPath, fragmentShaderPath);
 
     glUseProgram(shaderProgram);

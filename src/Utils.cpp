@@ -110,7 +110,7 @@ GLuint CreateVertexArrayObject(std::vector<Point> vertices, std::vector <GLuint>
     /* set VBO as currently bound GL_ARRAY_BUFFER (Vertex attributes) */
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
-    glBufferData(GL_ARRAY_BUFFER, vertices.size()* sizeof(Point), &vertices[0], GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Point), &vertices[0], GL_STATIC_DRAW);
     /* defines an array of generic vertex attribute data per each attribute. */
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Point), (void*)0);
     /* enables the generic vertex attribute array specified by index. */

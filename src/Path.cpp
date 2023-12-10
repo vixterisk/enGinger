@@ -1,12 +1,14 @@
 #include "path.h"
 
-struct PathNode {
+struct PathNode 
+{
     std::string name;
     PathNode *parent;
     std::vector<PathNode*> children;
 };
 
-class Path {
+class Path 
+{
 public:
     PathNode *rootPath;
     PathNode *resourcesPath;
@@ -16,9 +18,17 @@ public:
     PathNode *configPath;
 };
 
+std::map<PathNodeType, std::string> pathNodeName
+{
+    { PathNodeType::configJson, "configJson" },
+    { PathNodeType::vertexShader, "vertexShader" },
+    { PathNodeType::fragmentShader, "fragmentShader" }
+};
+
 Path path;
 
-PathNode *createPath(std::string name, PathNode *parent) {
+PathNode *createPath(std::string name, PathNode *parent) 
+{
     PathNode *newPath = new PathNode();
     newPath->name = name;
     newPath->parent = parent;
@@ -46,7 +56,8 @@ std::string GetSrcPathEnvVar()
     return srcPath;
 }
 
-void initializePath() {
+void initializePath() 
+{
     std::string srcPath = GetSrcPathEnvVar();
     path.rootPath = createPath(srcPath, NULL);
     path.resourcesPath = createPath("resources", path.rootPath);
@@ -56,33 +67,69 @@ void initializePath() {
     path.configPath = createPath("config.json", path.rootPath);
 }
 
-std::string getFullPath(PathNode *path) {
+
+void addShaderToPath(GLenum shaderType, std::string shaderName) 
+{
+    if (path.rootPath == NULL)
+        initializePath();
+    PathNode *shaderPathNode = createPath(shaderName, path.shadersPath);
+    if (shaderType == GL_VERTEX_SHADER)
+        path.vertexShaderPath = shaderPathNode;
+    else
+        path.fragmentShaderPath = shaderPathNode;
+}
+
+std::string getAbsolutePath(PathNode* path, PathNodeType type)
+{
+    if (path == NULL)
+    {
+        std::cout << "Path for " << pathNodeName[type] << " does not exist. Aborting... " << std::endl;
+        exit(1);
+    }
+
     const char pathSeparator =
 #ifdef _WIN32
         '\\';
 #else
         '/';
 #endif
-    std::string parentName = path->parent == NULL ? "" : getFullPath(path->parent) + pathSeparator;
+    std::string parentName = path->parent == NULL ? "" : getAbsolutePath(path->parent, type) + pathSeparator;
     return parentName + path->name;
 }
 
-std::string getConfigJsonPath() {
+std::string getAbsolutePath(PathNodeType type) 
+{
     if (path.rootPath == NULL)
         initializePath();
-    return getFullPath(path.configPath);
+
+    switch (type)
+    {
+        case configJson:
+            return getAbsolutePath(path.configPath, type);
+        case vertexShader:
+            return getAbsolutePath(path.vertexShaderPath, type);
+        case fragmentShader:
+            return getAbsolutePath(path.fragmentShaderPath, type);
+        default:
+            return NULL;
+    }
 }
 
-std::string getVertexShaderPath(std::string vertexShaderName) {
-    if (path.rootPath == NULL)
-        initializePath();
-    path.vertexShaderPath = createPath(vertexShaderName, path.shadersPath);
-    return getFullPath(path.vertexShaderPath);
-}
+std::string getShaderAbsolutePath(GLenum shaderType, std::string jsonKey)
+{
+    using json = nlohmann::json;
+    std::string configJson = getAbsolutePath(PathNodeType::configJson);
+    std::ifstream config(configJson);
+    json data = json::parse(config);
 
-std::string getFragmentShaderPath(std::string fragmentShaderName) {
-    if (path.rootPath == NULL)
-        initializePath();
-    path.fragmentShaderPath = createPath(fragmentShaderName, path.shadersPath);
-    return getFullPath(path.fragmentShaderPath);
+    PathNodeType ShaderPathNodeType;
+    if (shaderType == GL_VERTEX_SHADER)
+        ShaderPathNodeType = PathNodeType::vertexShader;
+    else
+        ShaderPathNodeType = PathNodeType::fragmentShader;
+
+    json shaderValue = data[jsonKey];
+    std::string vertexShaderName = shaderValue.template get<std::string>();
+    addShaderToPath(shaderType, vertexShaderName);
+    return getAbsolutePath(ShaderPathNodeType);
 }

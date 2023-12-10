@@ -1,4 +1,5 @@
 {
     "vertexShader": "vertexShader.glsl",
-    "fragmentShader": "fragmentShader.glsl"
+    "fragmentShader": "fragmentShader.glsl",
+    "fragmentShaderYellow": "fragmentShaderYellow.glsl"
 }

@@ -1,7 +1,9 @@
 #include "Dependencies.h"
 
-std::string getConfigJsonPath();
+enum PathNodeType { configJson, vertexShader, fragmentShader };
 
-std::string getVertexShaderPath(std::string vertexShaderName);
+void addShaderToPath(GLenum shaderType, std::string shaderName);
 
-std::string getFragmentShaderPath(std::string fragmentShaderName);
+std::string getAbsolutePath(PathNodeType type);
+
+std::string getShaderAbsolutePath(GLenum shaderType, std::string jsonKey);
