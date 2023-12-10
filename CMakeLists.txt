@@ -3,7 +3,7 @@ project(ENginger)
 
 set(PROJECT_NAME ENginger)
 set(SOURCE_PATH src)
-set(SOURCE_FILES "${SOURCE_PATH}/main.cpp" "${SOURCE_PATH}/ShaderProgram.cpp" "${SOURCE_PATH}/Utils.cpp" "${SOURCE_PATH}/glad.c")
+set(SOURCE_FILES "${SOURCE_PATH}/main.cpp" "${SOURCE_PATH}/ShaderProgram.cpp" "${SOURCE_PATH}/Utils.cpp" "${SOURCE_PATH}/glad.c" "${SOURCE_PATH}/Path.cpp")
 set(HEADER_PATH "${SOURCE_PATH}/include")
 set(LIBRARY_PATH "${SOURCE_PATH}/lib")
 
