@@ -25,26 +25,32 @@ std::vector<GLuint> indices =
 
 int main(int argc, char* argv[])
 {
-    initGLFW();
     glfwSetErrorCallback(errorCallback);
+    initGLFW();
 
     nlohmann::json vertexShaderValue = readConfig("vertexShader");
     std::string vertexShaderName = vertexShaderValue.template get<std::string>();
     nlohmann::json fragmentShaderValue = readConfig("fragmentShader");
     std::string fragmentShaderName = fragmentShaderValue.template get<std::string>();
     nlohmann::json fullscreenValue = readConfig("fullscreen");
-    bool isFullscreen = fullscreenValue.template get<bool>();
+    bool isFullscreen = fullscreenValue.template get<bool>();    
+    nlohmann::json borderlessValue = readConfig("borderless");
+    bool isBorderless = borderlessValue.template get<bool>();
+    nlohmann::json widthValue = readConfig("width");
+    int width = widthValue.template get<int>();
+    nlohmann::json heightValue = readConfig("height");
+    int height = heightValue.template get<int>();
 
-    GLFWwindow* window = createWindow("enGinger", isFullscreen);
-    exitWhenNull((int)window, "Failed to create GLFW window.");
+    GLFWwindow* window = createWindow("enGinger", isFullscreen, isBorderless, width, height);
+    exitWhenNull(!window, "Failed to create GLFW window.");
 
     GLuint ModelVAO = createVertexArrayObject(vertices, indices);
-    exitWhenNull(ModelVAO, "Failed to create Vertex Array Object.");
+    exitWhenNull(!ModelVAO, "Failed to create Vertex Array Object.");
 
     std::string vertexShaderPath = getShaderAbsolutePath(GL_VERTEX_SHADER, vertexShaderName);
     std::string fragmentShaderPath = getShaderAbsolutePath(GL_FRAGMENT_SHADER, fragmentShaderName);
     GLuint shaderProgram = createShaderProgramUsingFile(vertexShaderPath, fragmentShaderPath);
-    exitWhenNull(shaderProgram, "Failed to create shader program.");
+    exitWhenNull(!shaderProgram, "Failed to create shader program.");
     glUseProgram(shaderProgram);
     /* Frame */
     while (!glfwWindowShouldClose(window))

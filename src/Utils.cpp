@@ -19,9 +19,9 @@ void framebufferResizeCallback(GLFWwindow* window, int width, int height)
     setViewport(width, height);
 }
 
-void exitWhenNull(int parameter, std::string errorMessage)
+void exitWhenNull(bool isNull, std::string errorMessage)
 {
-    if (parameter == NULL)
+    if (isNull)
     {
         if (errorMessage != "")
             std::cout << errorMessage << "\n";
@@ -69,22 +69,28 @@ void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods
         glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
 }
 
-GLFWwindow* createWindow(const char* windowName, bool isFullscreen)
+void mouseCallback(GLFWwindow* window, double x, double y)
 {
-    /* This function creates a window and its associated OpenGL or OpenGL ES context. 
-    A context stores all of the state associated with this instance of OpenGL.  */
+}
+
+GLFWwindow* createWindow(const char* windowName, bool isFullscreen, bool isBorderless, int width, int height)
+{
+    glfwWindowHint(GLFW_DECORATED, !isBorderless);
     GLFWmonitor* monitor = glfwGetPrimaryMonitor();
     const GLFWvidmode* mode = glfwGetVideoMode(monitor);
-    GLFWmonitor* fullscreen = isFullscreen? monitor : NULL;
-    GLFWwindow* window = glfwCreateWindow(mode->width, mode->height, windowName, fullscreen, NULL);
-    if (window == NULL)
+    if (isFullscreen)
     {
-        std::cout << "::Failed to create GLFW window" << std::endl;
-        glfwTerminate();
-        return NULL;
+        width = mode->width;
+        height = mode->height;
     }
+    GLFWwindow* window = glfwCreateWindow(width, height, windowName, isFullscreen ? monitor : NULL, NULL);
+    exitWhenNull(!window, "::Failed to create GLFW window");
     /* In order for any OpenGL commands to work, a context must be current */
-    glfwMakeContextCurrent(window);
+    glfwMakeContextCurrent(window); 
+    if (!isFullscreen)
+    {
+        glfwSetWindowPos(window, mode->width / 2 - width / 2, mode->height / 2 - height / 2);
+    }
 
 //#ifdef __EMSCRIPTEN__
 //    EGLDisplay display = glfwGetEGLDisplay();
@@ -92,20 +98,15 @@ GLFWwindow* createWindow(const char* windowName, bool isFullscreen)
 //#else
 
     /* GLFW returns glfwGetProcAddress that defines the correct function based on which OS we're compiling for. */
-    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
-    {
-        std::cout << "::Failed to initialize GLAD" << std::endl;
-        return NULL;
-    }
+    exitWhenNull(!window, "::Failed to create GLFW window");
+    exitWhenNull(!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress), "::Failed to initialize GLAD");
 //#endif
-
-    int width, height;
-    glfwGetFramebufferSize(window, &width, &height);
     setViewport(width, height);
 
     /* Sets the framebuffer resize callback for the specified window. */
     glfwSetFramebufferSizeCallback(window, framebufferResizeCallback);
     glfwSetKeyCallback(window, keyCallback);
+    glfwSetCursorPosCallback(window, mouseCallback);
 
     return window;
 }

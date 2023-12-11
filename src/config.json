@@ -1,5 +1,8 @@
 {
     "vertexShader": "vertexShader.glsl",
     "fragmentShader": "fragmentShader.glsl",
-    "fullscreen": false
+    "fullscreen": true,
+    "borderless": true,
+    "width": 640,
+    "height": 480
 }
