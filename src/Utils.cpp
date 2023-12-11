@@ -3,10 +3,12 @@
 const int HEIGHT = 1080;
 const int WIDTH = 1920;
 
-void setViewport(int width = WIDTH, int height = HEIGHT)
+void setWindowFramebufferSizeViewport(GLFWwindow* window)
 {
     /** sets the viewport (a rectangle in pixels on the screen that you wish to render to), transforms NDC coordinates to screen coordinates.
     OpenGL will automatically scale the rendering so it fits into the given viewport. */
+    int width, height;
+    glfwGetFramebufferSize(window, &width, &height);
     glViewport(0, 0, width, height);
 }
 
@@ -29,7 +31,7 @@ void InitGLFW()
 /* Window resize callback*/
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
-    setViewport(width, height);
+    setWindowFramebufferSizeViewport(window);
 }
 
 GLFWwindow* createWindow(const char* windowName)
@@ -59,7 +61,7 @@ GLFWwindow* createWindow(const char* windowName)
         return NULL;
     }
 #endif
-    setViewport();
+    setWindowFramebufferSizeViewport(window);
     /* Sets the framebuffer resize callback for the specified window. */
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
     return window;

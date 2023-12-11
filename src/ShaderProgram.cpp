@@ -48,7 +48,8 @@ GLuint CreateShaderProgram(const char* vertexShaderSource, const char* fragmentS
 	int  success;
 	char infoLog[512];
 	glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
-	if (!success) {
+	if (!success)
+	{
 		glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
 		std::cout << "::Error: shader program compilation failed\n" << infoLog << std::endl;
 	}
@@ -62,7 +63,8 @@ GLuint CreateShaderProgram(const char* vertexShaderSource, const char* fragmentS
 const char* readShaderFromFile(std::string shaderPath)
 {
 	std::ifstream file(shaderPath);
-	if (!file) {
+	if (!file)
+	{
 		std::cout << "::Error: shader file reading failed. " << strerror(errno);
 		exit(1);
 	}
@@ -83,7 +85,7 @@ GLuint CreateShaderProgramUsingFile(std::string vertexShaderPath, std::string fr
 	const char* vertexShaderSource = readShaderFromFile(vertexShaderPath);
 	const char* fragmentShaderSource = readShaderFromFile(fragmentShaderPath);
 	GLuint shaderProgram = CreateShaderProgram(vertexShaderSource, fragmentShaderSource);
-//	delete vertexShaderSource; онвелс
+//	delete vertexShaderSource; О©╫О©╫О©╫О©╫О©╫О©╫
 //	delete fragmentShaderSource;
 	return shaderProgram;
 }

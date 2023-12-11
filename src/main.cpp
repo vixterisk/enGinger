@@ -9,14 +9,16 @@ instead of top-left. Eventually all the (transformed) coordinates should end up 
 These coordinates will then be transformed to screen-space coordinates (via the viewport transform). The resulting screen-space coordinates 
 are then transformed to fragments as inputs to fragment shader. */
 
-std::vector<Point> vertices = {
+std::vector<Point> vertices = 
+{
    { 0.5f, 0.5f, 0.0f },
    { 0.5f, -0.5f, 0.0f },
    { -0.5f,  -0.5f, 0.0f },
    { -0.5f,  0.5f, 0.0f }
 };
 
-std::vector<GLuint> indices = {
+std::vector<GLuint> indices = 
+{
    0, 1, 3,
    1, 2, 3
 };
@@ -27,8 +29,10 @@ int main(int argc, char* argv[])
     GLuint ModelVAO = CreateVertexArrayObject(vertices, indices);
 
     std::string vertexShaderPath = getShaderAbsolutePath(GL_VERTEX_SHADER, "vertexShader");
-    std::string fragmentShaderPath = getShaderAbsolutePath(GL_FRAGMENT_SHADER, "fragmentShaderYellow");
+    std::string fragmentShaderPath = getShaderAbsolutePath(GL_FRAGMENT_SHADER, "fragmentShader");
+    std::string fragmentShaderYellowPath = getShaderAbsolutePath(GL_FRAGMENT_SHADER, "fragmentShaderYellow");
     GLuint shaderProgram = CreateShaderProgramUsingFile(vertexShaderPath, fragmentShaderPath);
+    GLuint shaderProgramYellow = CreateShaderProgramUsingFile(vertexShaderPath, fragmentShaderYellowPath);
 
     glUseProgram(shaderProgram);
     /* Frame */
@@ -46,6 +50,7 @@ int main(int argc, char* argv[])
         /* Swaps the front and back buffers of the specified window that are used to prevent screen tearing. */
         glfwSwapBuffers(window);
     }
+    glfwDestroyWindow(window);
     glfwTerminate();
     return 0;
 }
