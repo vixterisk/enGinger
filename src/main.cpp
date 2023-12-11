@@ -25,32 +25,42 @@ std::vector<GLuint> indices =
 
 int main(int argc, char* argv[])
 {
-    GLFWwindow* window = createWindow("enGinger");
-    GLuint ModelVAO = CreateVertexArrayObject(vertices, indices);
+    initGLFW();
+    glfwSetErrorCallback(errorCallback);
 
-    std::string vertexShaderPath = getShaderAbsolutePath(GL_VERTEX_SHADER, "vertexShader");
-    std::string fragmentShaderPath = getShaderAbsolutePath(GL_FRAGMENT_SHADER, "fragmentShader");
-    std::string fragmentShaderYellowPath = getShaderAbsolutePath(GL_FRAGMENT_SHADER, "fragmentShaderYellow");
-    GLuint shaderProgram = CreateShaderProgramUsingFile(vertexShaderPath, fragmentShaderPath);
-    GLuint shaderProgramYellow = CreateShaderProgramUsingFile(vertexShaderPath, fragmentShaderYellowPath);
+    nlohmann::json vertexShaderValue = readConfig("vertexShader");
+    std::string vertexShaderName = vertexShaderValue.template get<std::string>();
+    nlohmann::json fragmentShaderValue = readConfig("fragmentShader");
+    std::string fragmentShaderName = fragmentShaderValue.template get<std::string>();
+    nlohmann::json fullscreenValue = readConfig("fullscreen");
+    bool isFullscreen = fullscreenValue.template get<bool>();
 
+    GLFWwindow* window = createWindow("enGinger", isFullscreen);
+    exitWhenNull((int)window, "Failed to create GLFW window.");
+
+    GLuint ModelVAO = createVertexArrayObject(vertices, indices);
+    exitWhenNull(ModelVAO, "Failed to create Vertex Array Object.");
+
+    std::string vertexShaderPath = getShaderAbsolutePath(GL_VERTEX_SHADER, vertexShaderName);
+    std::string fragmentShaderPath = getShaderAbsolutePath(GL_FRAGMENT_SHADER, fragmentShaderName);
+    GLuint shaderProgram = createShaderProgramUsingFile(vertexShaderPath, fragmentShaderPath);
+    exitWhenNull(shaderProgram, "Failed to create shader program.");
     glUseProgram(shaderProgram);
     /* Frame */
     while (!glfwWindowShouldClose(window))
     {
-        ClearAllBuffers();
-        processInput(window);
-
+        //std::cout << glfwGetTime() << "\n";
+        clearAllBuffers();
         /* All drawcalls here*/
         draw(shaderProgram, ModelVAO, indices.size());
-
         /* This function processes only those events that are already in the event queue and then returns immediately. 
         Processing events will cause the window and input callbacks associated with those events to be called. */
         glfwPollEvents();
         /* Swaps the front and back buffers of the specified window that are used to prevent screen tearing. */
         glfwSwapBuffers(window);
+        glfwSwapInterval(1);
     }
     glfwDestroyWindow(window);
     glfwTerminate();
-    return 0;
+    return EXIT_SUCCESS;
 }

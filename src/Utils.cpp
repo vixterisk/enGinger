@@ -1,45 +1,82 @@
 #include "Utils.h"
+#include "Path.h"
 
-const int HEIGHT = 1080;
-const int WIDTH = 1920;
-
-void setWindowFramebufferSizeViewport(GLFWwindow* window)
+void errorCallback(int code, const char* desc)
 {
-    /** sets the viewport (a rectangle in pixels on the screen that you wish to render to), transforms NDC coordinates to screen coordinates.
-    OpenGL will automatically scale the rendering so it fits into the given viewport. */
-    int width, height;
-    glfwGetFramebufferSize(window, &width, &height);
+    fputs(desc, stderr);
+}
+
+void setViewport(int width, int height)
+{
     glViewport(0, 0, width, height);
 }
 
-void InitGLFW()
+/* Window resize callback*/
+void framebufferResizeCallback(GLFWwindow* window, int width, int height)
+{
+    /** sets the viewport (a rectangle in pixels on the screen that you wish to render to), transforms NDC coordinates to screen coordinates.
+    OpenGL will automatically scale the rendering so it fits into the given viewport. */
+    setViewport(width, height);
+}
+
+void exitWhenNull(int parameter, std::string errorMessage)
+{
+    if (parameter == NULL)
+    {
+        if (errorMessage != "")
+            std::cout << errorMessage << "\n";
+        glfwTerminate();
+        exit(EXIT_FAILURE);
+    }
+}
+
+nlohmann::json readConfig(std::string jsonKey)
+{
+    using json = nlohmann::json;
+    std::string configJson = getAbsolutePath(PathNodeType::configJson);
+    std::ifstream config(configJson);
+    json data = json::parse(config);
+    return data[jsonKey];
+}
+
+void initGLFW()
 {
     /* This function initializes the GLFW library.Before most GLFW functions can be used, GLFW must be initialized
     (GLFW provides programmers with the ability to create and manage windows and OpenGL contexts,
     as well as handle joystick, keyboard and mouse input.) */
-    glfwInit();
-    /* There are a number of hints that can be set before the creation of a window and context. 
-    Some affect the window itself, others affect the framebuffer or context. 
+    if (!glfwInit())
+        exit(EXIT_FAILURE);
+    /* There are a number of hints that can be set before the creation of a window and context.
+    Some affect the window itself, others affect the framebuffer or context.
     Hints below specify the client API version that the created context must be compatible with. */
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    /* This hint specifies which OpenGL profile to create the context for. 
+    /* This hint specifies which OpenGL profile to create the context for.
     Core-profile gets access to a smaller subset of OpenGL features without backwards-compatible features we don't need. */
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 }
 
-/* Window resize callback*/
-void framebuffer_size_callback(GLFWwindow* window, int width, int height)
+void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-    setWindowFramebufferSizeViewport(window);
+    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+        glfwSetWindowShouldClose(window, true);
+
+    if (key == GLFW_KEY_1 && action == GLFW_PRESS)
+        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    if (key == GLFW_KEY_2 && action == GLFW_PRESS)
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    if (key == GLFW_KEY_3 && action == GLFW_PRESS)
+        glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
 }
 
-GLFWwindow* createWindow(const char* windowName)
+GLFWwindow* createWindow(const char* windowName, bool isFullscreen)
 {
-    InitGLFW();
     /* This function creates a window and its associated OpenGL or OpenGL ES context. 
     A context stores all of the state associated with this instance of OpenGL.  */
-    GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, windowName, NULL, NULL);
+    GLFWmonitor* monitor = glfwGetPrimaryMonitor();
+    const GLFWvidmode* mode = glfwGetVideoMode(monitor);
+    GLFWmonitor* fullscreen = isFullscreen? monitor : NULL;
+    GLFWwindow* window = glfwCreateWindow(mode->width, mode->height, windowName, fullscreen, NULL);
     if (window == NULL)
     {
         std::cout << "::Failed to create GLFW window" << std::endl;
@@ -49,10 +86,10 @@ GLFWwindow* createWindow(const char* windowName)
     /* In order for any OpenGL commands to work, a context must be current */
     glfwMakeContextCurrent(window);
 
-#ifdef __EMSCRIPTEN__
-    EGLDisplay display = glfwGetEGLDisplay();
-    int egl_version = gladLoaderLoadEGL(display);
-#else
+//#ifdef __EMSCRIPTEN__
+//    EGLDisplay display = glfwGetEGLDisplay();
+//    int egl_version = gladLoaderLoadEGL(display);
+//#else
 
     /* GLFW returns glfwGetProcAddress that defines the correct function based on which OS we're compiling for. */
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
@@ -60,24 +97,17 @@ GLFWwindow* createWindow(const char* windowName)
         std::cout << "::Failed to initialize GLAD" << std::endl;
         return NULL;
     }
-#endif
-    setWindowFramebufferSizeViewport(window);
+//#endif
+
+    int width, height;
+    glfwGetFramebufferSize(window, &width, &height);
+    setViewport(width, height);
+
     /* Sets the framebuffer resize callback for the specified window. */
-    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+    glfwSetFramebufferSizeCallback(window, framebufferResizeCallback);
+    glfwSetKeyCallback(window, keyCallback);
+
     return window;
-}
-
-void processInput(GLFWwindow* window)
-{
-    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-        glfwSetWindowShouldClose(window, true);
-
-    if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS)
-        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-    if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS)
-        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-    if (glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS)
-        glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
 }
 
 /* Creates memory on the GPU to store vertex data ( via so called vertex buffer objects (VBO) ) as large batches of data, 
@@ -86,7 +116,7 @@ specifies how to send the data to the graphics card.
 
 P.S. Sending data to the graphics card from the CPU is relatively slow, so whenever is possible it's best to send as much data as possible at once.
 Once the data is in the graphics card's memory the vertex shader has almost instant access to the vertices making it extremely fast.*/
-GLuint CreateVertexArrayObject(std::vector<Point> vertices, std::vector <GLuint> indices)
+GLuint createVertexArrayObject(std::vector<Point> vertices, std::vector <GLuint> indices)
 {
     /* A Vertex Array Object (or VAO) is an object that describes how the vertex attributes are stored in a Vertex Buffer Object (or VBO) */
     GLuint VAO;
@@ -120,7 +150,7 @@ GLuint CreateVertexArrayObject(std::vector<Point> vertices, std::vector <GLuint>
     return VAO;
 }
 
-void ClearAllBuffers()
+void clearAllBuffers()
 {
     /* State-setting function:
     glClearColor specifies the red, green, blue, and alpha values used by glClear to clear the color buffers. 

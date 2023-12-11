@@ -36,7 +36,7 @@ PathNode *createPath(std::string name, PathNode *parent)
     return newPath;
 }
 
-std::string GetSrcPathEnvVar()
+std::string getSrcPathEnvVar()
 {
     const unsigned short int PATHBUFFERSIZE = 100;
     char srcPath[PATHBUFFERSIZE];
@@ -45,20 +45,20 @@ std::string GetSrcPathEnvVar()
     if (!getenv(engingeSrcPath))
     {
         std::cout << "The environment variable " << engingeSrcPath << " was not found.\n" << std::endl;
-        exit(1);
+        exit(EXIT_FAILURE);
     }
 
     if (snprintf(srcPath, PATHBUFFERSIZE, "%s", getenv(engingeSrcPath)) >= PATHBUFFERSIZE)
     {
         std::cout << "Path buffer size of " << PATHBUFFERSIZE << " was too small. Aborting\n" << std::endl;
-        exit(1);
+        exit(EXIT_FAILURE);
     }
     return srcPath;
 }
 
 void initializePath() 
 {
-    std::string srcPath = GetSrcPathEnvVar();
+    std::string srcPath = getSrcPathEnvVar();
     path.rootPath = createPath(srcPath, NULL);
     path.resourcesPath = createPath("resources", path.rootPath);
     path.shadersPath = createPath("shaders", path.resourcesPath);
@@ -72,6 +72,9 @@ void addShaderToPath(GLenum shaderType, std::string shaderName)
 {
     if (path.rootPath == NULL)
         initializePath();
+    for (int i = 0; i < path.shadersPath->children.size(); i++)
+        if (path.shadersPath->children[i]->name == shaderName)
+            return;
     PathNode *shaderPathNode = createPath(shaderName, path.shadersPath);
     if (shaderType == GL_VERTEX_SHADER)
         path.vertexShaderPath = shaderPathNode;
@@ -84,7 +87,7 @@ std::string getAbsolutePath(PathNode* path, PathNodeType type)
     if (path == NULL)
     {
         std::cout << "Path for " << pathNodeName[type] << " does not exist. Aborting... " << std::endl;
-        exit(1);
+        exit(EXIT_FAILURE);
     }
 
     const char pathSeparator =
@@ -115,21 +118,14 @@ std::string getAbsolutePath(PathNodeType type)
     }
 }
 
-std::string getShaderAbsolutePath(GLenum shaderType, std::string jsonKey)
+std::string getShaderAbsolutePath(GLenum shaderType, std::string vertexShaderName)
 {
-    using json = nlohmann::json;
-    std::string configJson = getAbsolutePath(PathNodeType::configJson);
-    std::ifstream config(configJson);
-    json data = json::parse(config);
-
     PathNodeType ShaderPathNodeType;
     if (shaderType == GL_VERTEX_SHADER)
         ShaderPathNodeType = PathNodeType::vertexShader;
     else
         ShaderPathNodeType = PathNodeType::fragmentShader;
 
-    json shaderValue = data[jsonKey];
-    std::string vertexShaderName = shaderValue.template get<std::string>();
     addShaderToPath(shaderType, vertexShaderName);
     return getAbsolutePath(ShaderPathNodeType);
 }

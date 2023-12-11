@@ -2,16 +2,18 @@
 
 #include "Dependencies.h"
 
-void InitGLFW();
+void errorCallback(int code, const char* desc);
 
-void framebuffer_size_callback(GLFWwindow* window, int width, int height);
+nlohmann::json readConfig(std::string jsonKey);
 
-GLFWwindow* createWindow(const char* windowName);
+void exitWhenNull(int parameter, std::string errorMessage);
 
-void processInput(GLFWwindow* window);
+void initGLFW();
 
-GLuint CreateVertexArrayObject(std::vector<Point> vertices, std::vector<GLuint> indices);
+GLFWwindow* createWindow(const char* windowName, bool isFullscreen);
 
-void ClearAllBuffers();
+GLuint createVertexArrayObject(std::vector<Point> vertices, std::vector<GLuint> indices);
+
+void clearAllBuffers();
 
 void draw(GLuint shaderProgram, GLuint VAO, int ElementsCount);

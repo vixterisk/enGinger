@@ -1,7 +1,7 @@
 #include "ShaderProgram.h"
 
 /* create glsl shader needed type from given shader source code */
-unsigned int CreateShader(GLenum shaderType, const char* shaderSource)
+unsigned int createShader(GLenum shaderType, const char* shaderSource)
 {
 	unsigned int shader;
 	/* creates an empty shader object and returns a non-zero value by which it can be referenced */
@@ -30,10 +30,10 @@ unsigned int CreateShader(GLenum shaderType, const char* shaderSource)
 }
 
 /* creates shader program with given vertex shader source code and fragment shader source code*/
-GLuint CreateShaderProgram(const char* vertexShaderSource, const char* fragmentShaderSource)
+GLuint createShaderProgram(const char* vertexShaderSource, const char* fragmentShaderSource)
 {
-	unsigned int vertexShader = CreateShader(GL_VERTEX_SHADER, vertexShaderSource);
-	unsigned int fragmentShader = CreateShader(GL_FRAGMENT_SHADER, fragmentShaderSource);
+	unsigned int vertexShader = createShader(GL_VERTEX_SHADER, vertexShaderSource);
+	unsigned int fragmentShader = createShader(GL_FRAGMENT_SHADER, fragmentShaderSource);
 	unsigned int shaderProgram;
 	/* create shader program object and get its ID */
 	shaderProgram = glCreateProgram();
@@ -66,7 +66,7 @@ const char* readShaderFromFile(std::string shaderPath)
 	if (!file)
 	{
 		std::cout << "::Error: shader file reading failed. " << strerror(errno);
-		exit(1);
+		return NULL;
 	}
 	std::stringstream buffer;
 	buffer << file.rdbuf();
@@ -80,12 +80,12 @@ const char* readShaderFromFile(std::string shaderPath)
 
 /* Reads vertex shader located in 'resources/shaders/vertexShaderName' 
 and fragment shader located in 'resourcess/shaders/fragmentShaderName', then creates shader program from these shaders */
-GLuint CreateShaderProgramUsingFile(std::string vertexShaderPath, std::string fragmentShaderPath)
+GLuint createShaderProgramUsingFile(std::string vertexShaderPath, std::string fragmentShaderPath)
 {
 	const char* vertexShaderSource = readShaderFromFile(vertexShaderPath);
 	const char* fragmentShaderSource = readShaderFromFile(fragmentShaderPath);
-	GLuint shaderProgram = CreateShaderProgram(vertexShaderSource, fragmentShaderSource);
-//	delete vertexShaderSource; ������
-//	delete fragmentShaderSource;
+	if (vertexShaderSource == NULL || fragmentShaderSource == NULL)
+		return NULL;
+	GLuint shaderProgram = createShaderProgram(vertexShaderSource, fragmentShaderSource);
 	return shaderProgram;
 }
