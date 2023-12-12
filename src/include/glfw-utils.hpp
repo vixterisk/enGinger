@@ -2,7 +2,7 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <nlohmann-json/json.hpp>
-#include "geometry/point.h"
+#include "geometry/point.hpp"
 
 void exitWhenNull(bool isNull, std::string errorMessage);
 
