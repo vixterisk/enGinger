@@ -1,3 +1,9 @@
+#pragma once
+#include <glad/glad.h>
+#include <iostream> 
+#include <fstream>
+#include <sstream>
+#include <string>
 #include "ShaderProgram.h"
 
 /* create glsl shader needed type from given shader source code */
