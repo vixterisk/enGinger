@@ -1,3 +1,7 @@
+#pragma once
+#include <glad/glad.h>
+#include "geometry/point.h"
+#include <vector>
 #include "renderer.h"
 
 /* Creates memory on the GPU to store vertex data ( via so called vertex buffer objects (VBO) ) as large batches of data,

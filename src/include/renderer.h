@@ -1,5 +1,3 @@
-#include "Dependencies.h"
-
 struct VertexArrayData
 {
     GLuint boundVAO;
