@@ -25,6 +25,14 @@ std::vector<GLuint> indices =
    1, 2, 3
 };
 
+void cleanGlResources(VertexArrayData vertexArrays, GLuint shaderPrograms)
+{
+    glDeleteVertexArrays(1, &vertexArrays.boundVAO);
+    glDeleteBuffers(1, &vertexArrays.boundVBO);
+    glDeleteBuffers(1, &vertexArrays.boundEBO);
+    glDeleteProgram(shaderPrograms);
+}
+
 int main(int argc, char* argv[])
 {
     initGLFW();
@@ -34,8 +42,9 @@ int main(int argc, char* argv[])
     GLFWwindow* window = createWindow("enGinger", data.fullscreen, data.borderless, data.width, data.height);
     exitWhenNull(!window, "Failed to create GLFW window.");
 
-    GLuint ModelVAO = createVertexArrayObject(vertices, indices);
-    exitWhenNull(!ModelVAO, "Failed to create Vertex Array Object.");
+    VertexArrayData VAD = createVertexArrayObject(vertices, indices);
+
+    exitWhenNull(!VAD.boundVAO, "Failed to create Vertex Array Object.");
 
     std::string vertexShaderPath = getShaderAbsolutePath(GL_VERTEX_SHADER, data.vertexShader);
     std::string fragmentShaderPath = getShaderAbsolutePath(GL_FRAGMENT_SHADER, data.fragmentShader);
@@ -48,13 +57,15 @@ int main(int argc, char* argv[])
         //std::cout << glfwGetTime() << "\n";
         clearAllBuffers();
         /* All drawcalls here*/
-        draw(shaderProgram, ModelVAO, indices.size());
+        draw(shaderProgram, VAD.boundVAO, indices.size());
         /* This function processes only those events that are already in the event queue and then returns immediately. 
         Processing events will cause the window and input callbacks associated with those events to be called. */
         glfwPollEvents();
         /* Swaps the front and back buffers of the specified window that are used to prevent screen tearing. */
         glfwSwapBuffers(window);
     }
+    cleanGlResources(VAD, shaderProgram);
+
     glfwDestroyWindow(window);
     glfwTerminate();
     return EXIT_SUCCESS;
