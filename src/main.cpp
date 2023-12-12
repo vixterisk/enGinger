@@ -1,3 +1,4 @@
+#include <windows.h>
 #include "glfw-utils.hpp"
 #include "renderer.hpp"
 #include "config-data.hpp"
@@ -24,14 +25,6 @@ std::vector<GLuint> indices =
    1, 2, 3
 };
 
-void cleanGlResources(VertexArrayData vertexArrayData, GLuint shaderProgram)
-{
-    glDeleteVertexArrays(1, &vertexArrayData.boundVAO);
-    glDeleteBuffers(1, &vertexArrayData.boundVBO);
-    glDeleteBuffers(1, &vertexArrayData.boundEBO);
-    glDeleteProgram(shaderProgram);
-}
-
 int main(int argc, char* argv[])
 {
     initGLFW();
@@ -50,6 +43,7 @@ int main(int argc, char* argv[])
     exitWhenNull(!shaderProgram, "Failed to create shader program.");
     glUseProgram(shaderProgram);
     /* Frame -  All drawcalls here*/
+    ShowWindow(GetConsoleWindow(), SW_HIDE);
     while (!glfwWindowShouldClose(window))
     {
         //std::cout << glfwGetTime() << "\n";
@@ -61,9 +55,11 @@ int main(int argc, char* argv[])
         /* Swaps the front and back buffers of the specified window that are used to prevent screen tearing. */
         glfwSwapBuffers(window);
     }
-    cleanGlResources(vertexArrayData, shaderProgram);
+    ShowWindow(GetConsoleWindow(), SW_RESTORE);
 
+    cleanGlResources(vertexArrayData, shaderProgram);
     glfwDestroyWindow(window);
     glfwTerminate();
+
     return EXIT_SUCCESS;
 }

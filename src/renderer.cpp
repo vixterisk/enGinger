@@ -62,3 +62,11 @@ void draw(GLuint shaderProgram, GLuint VAO, int ElementsCount)
     when being rendered e.g. "GL_POINTS" */
     glDrawElements(GL_TRIANGLES, ElementsCount, GL_UNSIGNED_INT, 0);
 }
+
+void cleanGlResources(VertexArrayData vertexArrayData, GLuint shaderProgram)
+{
+    glDeleteVertexArrays(1, &vertexArrayData.boundVAO);
+    glDeleteBuffers(1, &vertexArrayData.boundVBO);
+    glDeleteBuffers(1, &vertexArrayData.boundEBO);
+    glDeleteProgram(shaderProgram);
+}
