@@ -1,5 +1,4 @@
 #include "glfwUtils.h"
-
 #include "renderer.h"
 #include "configData.h"
 #include "Path.h"

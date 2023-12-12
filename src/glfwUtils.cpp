@@ -1,7 +1,6 @@
-
-#include "glfwUtils.h"
 #include <iostream> 
 #include "Path.h"
+#include "glfwUtils.h"
 
 void errorCallback(int code, const char* desc)
 {
