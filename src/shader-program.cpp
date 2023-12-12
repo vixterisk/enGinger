@@ -4,7 +4,7 @@
 #include <fstream>
 #include <sstream>
 #include <string>
-#include "ShaderProgram.h"
+#include "shader-program.hpp"
 
 /* create glsl shader needed type from given shader source code */
 unsigned int createShader(GLenum shaderType, const char* shaderSource)

@@ -3,7 +3,7 @@ project(ENginger)
 
 set(PROJECT_NAME ENginger)
 set(SOURCE_PATH src)
-set(SOURCE_FILES "${SOURCE_PATH}/main.cpp" "${SOURCE_PATH}/ShaderProgram.cpp" "${SOURCE_PATH}/glfwUtils.cpp" "${SOURCE_PATH}/renderer.cpp" "${SOURCE_PATH}/glad.c" "${SOURCE_PATH}/Path.cpp" "${SOURCE_PATH}/configData.cpp")
+set(SOURCE_FILES "${SOURCE_PATH}/main.cpp" "${SOURCE_PATH}/shader-program.cpp" "${SOURCE_PATH}/glfw-utils.cpp" "${SOURCE_PATH}/renderer.cpp" "${SOURCE_PATH}/glad.c" "${SOURCE_PATH}/path.cpp" "${SOURCE_PATH}/config-data.cpp")
 set(HEADER_PATH "${SOURCE_PATH}/include")
 set(LIBRARY_PATH "${SOURCE_PATH}/lib")
 

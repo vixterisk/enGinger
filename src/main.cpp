@@ -1,8 +1,8 @@
-#include "glfwUtils.h"
-#include "renderer.h"
-#include "configData.h"
-#include "Path.h"
-#include "ShaderProgram.h"
+#include "glfw-utils.hpp"
+#include "renderer.hpp"
+#include "config-data.hpp"
+#include "path.hpp"
+#include "shader-program.hpp"
 
 /* vertices within Normalized Device Coordinates (NDC) range
 Unlike usual screen coordinates the positive y-axis points in the up-direction and the (0,0) coordinates are at the center of the graph, 
