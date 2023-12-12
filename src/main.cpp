@@ -24,12 +24,12 @@ std::vector<GLuint> indices =
    1, 2, 3
 };
 
-void cleanGlResources(VertexArrayData vertexArrays, GLuint shaderPrograms)
+void cleanGlResources(VertexArrayData vertexArrayData, GLuint shaderProgram)
 {
-    glDeleteVertexArrays(1, &vertexArrays.boundVAO);
-    glDeleteBuffers(1, &vertexArrays.boundVBO);
-    glDeleteBuffers(1, &vertexArrays.boundEBO);
-    glDeleteProgram(shaderPrograms);
+    glDeleteVertexArrays(1, &vertexArrayData.boundVAO);
+    glDeleteBuffers(1, &vertexArrayData.boundVBO);
+    glDeleteBuffers(1, &vertexArrayData.boundEBO);
+    glDeleteProgram(shaderProgram);
 }
 
 int main(int argc, char* argv[])
@@ -42,7 +42,6 @@ int main(int argc, char* argv[])
     exitWhenNull(!window, "Failed to create GLFW window.");
 
     VertexArrayData vertexArrayData = getVertexArrayData(vertices, indices);
-
     exitWhenNull(!vertexArrayData.boundVAO, "Failed to create Vertex Array Object.");
 
     std::string vertexShaderPath = getShaderAbsolutePath(GL_VERTEX_SHADER, data.vertexShader);
@@ -50,7 +49,6 @@ int main(int argc, char* argv[])
     GLuint shaderProgram = createShaderProgramUsingFile(vertexShaderPath, fragmentShaderPath);
     exitWhenNull(!shaderProgram, "Failed to create shader program.");
     glUseProgram(shaderProgram);
-    glfwSwapInterval(1);
     /* Frame -  All drawcalls here*/
     while (!glfwWindowShouldClose(window))
     {

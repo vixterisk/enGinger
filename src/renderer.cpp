@@ -12,7 +12,7 @@ P.S. Sending data to the graphics card from the CPU is relatively slow, so whene
 Once the data is in the graphics card's memory the vertex shader has almost instant access to the vertices making it extremely fast.*/
 VertexArrayData getVertexArrayData(std::vector<Vector3> vertices, std::vector <GLuint> indices)
 {
-    VertexArrayData result = VertexArrayData();
+    VertexArrayData result;
     /* A Vertex Array Object (or VAO) is an object that describes how the vertex attributes are stored in a Vertex Buffer Object (or VBO) */
     /* returns vertex array object name in VAO */
     glGenVertexArrays(1, &result.boundVAO);

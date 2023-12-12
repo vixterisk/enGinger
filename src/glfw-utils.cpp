@@ -2,6 +2,17 @@
 #include "path.hpp"
 #include "glfw-utils.hpp"
 
+void exitWhenNull(bool isNull, std::string errorMessage)
+{
+    if (isNull)
+    {
+        if (errorMessage != "")
+            std::cout << errorMessage << "\n";
+        glfwTerminate();
+        exit(EXIT_FAILURE);
+    }
+}
+
 void errorCallback(int code, const char* desc)
 {
     fputs(desc, stderr);
@@ -18,17 +29,6 @@ void framebufferResizeCallback(GLFWwindow* window, int width, int height)
     /** sets the viewport (a rectangle in pixels on the screen that you wish to render to), transforms NDC coordinates to screen coordinates.
     OpenGL will automatically scale the rendering so it fits into the given viewport. */
     setViewport(width, height);
-}
-
-void exitWhenNull(bool isNull, std::string errorMessage)
-{
-    if (isNull)
-    {
-        if (errorMessage != "")
-            std::cout << errorMessage << "\n";
-        glfwTerminate();
-        exit(EXIT_FAILURE);
-    }
 }
 
 void initGLFW()

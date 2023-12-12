@@ -74,9 +74,11 @@ void addShaderToPath(GLenum shaderType, std::string shaderName)
 {
     if (path.rootPath == NULL)
         initializePath();
+
     for (int i = 0; i < path.shadersPath->children.size(); i++)
         if (path.shadersPath->children[i]->name == shaderName)
             return;
+
     PathNode *shaderPathNode = createPath(shaderName, path.shadersPath);
     if (shaderType == GL_VERTEX_SHADER)
         path.vertexShaderPath = shaderPathNode;

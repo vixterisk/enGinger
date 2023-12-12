@@ -22,11 +22,10 @@ void readValue(nlohmann::json data, std::string jsonKey, bool &result)
 ConfigData readConfig()
 {
     using json = nlohmann::json;
-    std::string configJson = getAbsolutePath(PathNodeType::configJson);
-    std::ifstream config(configJson);
-    json data = json::parse(config);
-
     ConfigData result;
+    std::string configAbsolutePath = getAbsolutePath(PathNodeType::configJson);
+    std::ifstream configFile(configAbsolutePath);
+    json data = json::parse(configFile);
 
     readValue(data, "vertexShader", result.vertexShader);
     readValue(data, "fragmentShader", result.fragmentShader);
@@ -34,6 +33,5 @@ ConfigData readConfig()
     readValue(data, "borderless", result.borderless);
     readValue(data, "width", result.width);
     readValue(data, "height", result.height);
-
     return result;
 }
