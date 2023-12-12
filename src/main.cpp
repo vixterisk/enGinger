@@ -1,7 +1,9 @@
-#include <Dependencies.h>
-#include <Utils.h>
-#include <Path.h>
-#include <ShaderProgram.h>
+#include "Dependencies.h"
+#include "glfwUtils.h"
+#include "renderer.h"
+#include "configData.h"
+#include "Path.h"
+#include "ShaderProgram.h"
 
 /* vertices within Normalized Device Coordinates (NDC) range
 Unlike usual screen coordinates the positive y-axis points in the up-direction and the (0,0) coordinates are at the center of the graph, 
@@ -9,7 +11,7 @@ instead of top-left. Eventually all the (transformed) coordinates should end up 
 These coordinates will then be transformed to screen-space coordinates (via the viewport transform). The resulting screen-space coordinates 
 are then transformed to fragments as inputs to fragment shader. */
 
-std::vector<Point> vertices = 
+std::vector<Vector3> vertices = 
 {
    { 0.5f, 0.5f, 0.0f },
    { 0.5f, -0.5f, 0.0f },
@@ -25,30 +27,18 @@ std::vector<GLuint> indices =
 
 int main(int argc, char* argv[])
 {
-    glfwSetErrorCallback(errorCallback);
     initGLFW();
 
-    nlohmann::json vertexShaderValue = readConfig("vertexShader");
-    std::string vertexShaderName = vertexShaderValue.template get<std::string>();
-    nlohmann::json fragmentShaderValue = readConfig("fragmentShader");
-    std::string fragmentShaderName = fragmentShaderValue.template get<std::string>();
-    nlohmann::json fullscreenValue = readConfig("fullscreen");
-    bool isFullscreen = fullscreenValue.template get<bool>();    
-    nlohmann::json borderlessValue = readConfig("borderless");
-    bool isBorderless = borderlessValue.template get<bool>();
-    nlohmann::json widthValue = readConfig("width");
-    int width = widthValue.template get<int>();
-    nlohmann::json heightValue = readConfig("height");
-    int height = heightValue.template get<int>();
+    ConfigData data = readConfig();
 
-    GLFWwindow* window = createWindow("enGinger", isFullscreen, isBorderless, width, height);
+    GLFWwindow* window = createWindow("enGinger", data.fullscreen, data.borderless, data.width, data.height);
     exitWhenNull(!window, "Failed to create GLFW window.");
 
     GLuint ModelVAO = createVertexArrayObject(vertices, indices);
     exitWhenNull(!ModelVAO, "Failed to create Vertex Array Object.");
 
-    std::string vertexShaderPath = getShaderAbsolutePath(GL_VERTEX_SHADER, vertexShaderName);
-    std::string fragmentShaderPath = getShaderAbsolutePath(GL_FRAGMENT_SHADER, fragmentShaderName);
+    std::string vertexShaderPath = getShaderAbsolutePath(GL_VERTEX_SHADER, data.vertexShader);
+    std::string fragmentShaderPath = getShaderAbsolutePath(GL_FRAGMENT_SHADER, data.fragmentShader);
     GLuint shaderProgram = createShaderProgramUsingFile(vertexShaderPath, fragmentShaderPath);
     exitWhenNull(!shaderProgram, "Failed to create shader program.");
     glUseProgram(shaderProgram);
@@ -64,7 +54,6 @@ int main(int argc, char* argv[])
         glfwPollEvents();
         /* Swaps the front and back buffers of the specified window that are used to prevent screen tearing. */
         glfwSwapBuffers(window);
-        glfwSwapInterval(1);
     }
     glfwDestroyWindow(window);
     glfwTerminate();

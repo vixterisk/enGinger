@@ -1,5 +1,4 @@
 #pragma once
-
 #include "Dependencies.h"
 
 GLuint createShaderProgramUsingFile(std::string vertexShaderPath, std::string fragmentShaderPath);

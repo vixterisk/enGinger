@@ -1,4 +1,4 @@
-struct Point
+struct Vector3
 {
     GLfloat x;
     GLfloat y;
