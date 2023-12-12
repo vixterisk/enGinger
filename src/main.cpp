@@ -1,4 +1,3 @@
-#include "Dependencies.h"
 #include "glfwUtils.h"
 #include "renderer.h"
 #include "configData.h"
