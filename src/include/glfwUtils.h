@@ -1,7 +1,8 @@
 #pragma once
-#include "Dependencies.h"
-
-nlohmann::json readConfig(std::string jsonKey);
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
+#include <nlohmann-json/json.hpp>
+#include "geometry/point.h"
 
 void exitWhenNull(bool isNull, std::string errorMessage);
 
