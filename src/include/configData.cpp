@@ -1,5 +1,5 @@
-#include "configData.h"
 #include "Path.h"
+#include "configData.h"
 
 void readValue(nlohmann::json data, std::string jsonKey, int &result)
 {
