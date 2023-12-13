@@ -1,6 +1,6 @@
+#include "glfw-utils.hpp"
 #include <iostream> 
 #include "path.hpp"
-#include "glfw-utils.hpp"
 
 void exitWhenNull(bool isNull, std::string errorMessage)
 {

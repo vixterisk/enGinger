@@ -27,6 +27,7 @@ std::vector<GLuint> indices =
 
 int main(int argc, char* argv[])
 {
+
     initGLFW();
 
     ConfigData data = readConfig();
@@ -48,7 +49,7 @@ int main(int argc, char* argv[])
     {
         //std::cout << glfwGetTime() << "\n";
         clearAllBuffers();
-        draw(shaderProgram, vertexArrayData.boundVAO, indices.size());
+        draw(shaderProgram, *vertexArrayData.boundVAO, indices.size());
         /* This function processes only those events that are already in the event queue and then returns immediately. 
         Processing events will cause the window and input callbacks associated with those events to be called. */
         glfwPollEvents();

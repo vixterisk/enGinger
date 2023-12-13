@@ -1,10 +1,8 @@
 #pragma once
-#include <glad/glad.h>
+#include "shader-program.hpp"
 #include <iostream> 
 #include <fstream>
 #include <sstream>
-#include <string>
-#include "shader-program.hpp"
 
 /* create glsl shader needed type from given shader source code */
 unsigned int createShader(GLenum shaderType, const char* shaderSource)

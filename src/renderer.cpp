@@ -1,7 +1,7 @@
 #pragma once
 #include <glad/glad.h>
-#include "geometry/point.hpp"
 #include <vector>
+#include "geometry/point.hpp"
 #include "renderer.hpp"
 
 /* Creates memory on the GPU to store vertex data ( via so called vertex buffer objects (VBO) ) as large batches of data,
@@ -12,27 +12,27 @@ P.S. Sending data to the graphics card from the CPU is relatively slow, so whene
 Once the data is in the graphics card's memory the vertex shader has almost instant access to the vertices making it extremely fast.*/
 VertexArrayData getVertexArrayData(std::vector<Vector3> vertices, std::vector <GLuint> indices)
 {
-    VertexArrayData result;
+    VertexArrayData result = VertexArrayData(2, 2, 2);
     /* A Vertex Array Object (or VAO) is an object that describes how the vertex attributes are stored in a Vertex Buffer Object (or VBO) */
     /* returns vertex array object name in VAO */
-    glGenVertexArrays(1, &result.boundVAO);
+    glGenVertexArrays(result.getBoundVAOCount(), result.boundVAO);
     /* binds the vertex array object with name VAO */
-    glBindVertexArray(result.boundVAO);
+    glBindVertexArray(*result.boundVAO);
 
     /* element buffer object allows to reuse vertex data without duplicating all attributes values */
     /* returns buffer object name in EBO */
-    glGenBuffers(1, &result.boundEBO);
+    glGenBuffers(result.getBoundEBOCount(), result.boundEBO);
     /* set EBO as currently bound GL_ELEMENT_ARRAY_BUFFER (Vertex array indices) */
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, result.boundEBO);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, *result.boundEBO);
     /* creates and initializes a buffer object's data store.
     With GL_STATIC_DRAW data store contents will be modified once and used many times as the source for GL drawing commands. */
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), &indices[0], GL_STATIC_DRAW);
 
     /* vertex buffer object provides methods for uploading vertex data (position, normal vector, color, etc.) */
     /* returns buffer object name in VBO */
-    glGenBuffers(1, &result.boundVBO);
+    glGenBuffers(result.getBoundVBOCount(), result.boundVBO);
     /* set VBO as currently bound GL_ARRAY_BUFFER (Vertex attributes) */
-    glBindBuffer(GL_ARRAY_BUFFER, result.boundVBO);
+    glBindBuffer(GL_ARRAY_BUFFER, *result.boundVBO);
 
     glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vector3), &vertices[0], GL_STATIC_DRAW);
     /* defines an array of generic vertex attribute data per each attribute. */
@@ -65,8 +65,8 @@ void draw(GLuint shaderProgram, GLuint VAO, int ElementsCount)
 
 void cleanGlResources(VertexArrayData vertexArrayData, GLuint shaderProgram)
 {
-    glDeleteVertexArrays(1, &vertexArrayData.boundVAO);
-    glDeleteBuffers(1, &vertexArrayData.boundVBO);
-    glDeleteBuffers(1, &vertexArrayData.boundEBO);
+    glDeleteVertexArrays(vertexArrayData.getBoundVAOCount(), vertexArrayData.boundVAO);
+    glDeleteBuffers(vertexArrayData.getBoundVBOCount(), vertexArrayData.boundVBO);
+    glDeleteBuffers(vertexArrayData.getBoundEBOCount(), vertexArrayData.boundEBO);
     glDeleteProgram(shaderProgram);
 }
