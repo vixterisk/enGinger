@@ -12,28 +12,32 @@ VertexArrayData getVertexArrayData(Matrix vertices, std::vector <GLuint> indices
     /* A Vertex Array Object (or VAO) is an object that describes how the vertex attributes are stored in a Vertex Buffer Object (or VBO) */
     /* returns vertex array object name in VAO */
     glGenVertexArrays(result.getBoundVAOCount(), result.boundVAO);
+    /* returns buffer object name in EBO */
+    glGenBuffers(result.getBoundEBOCount(), result.boundEBO);
+    /* returns buffer object name in VBO */
+    glGenBuffers(result.getBoundVBOCount(), result.boundVBO);
+
     /* binds the vertex array object with name VAO */
     glBindVertexArray(*result.boundVAO);
 
+    /* vertex buffer object provides methods for uploading vertex data (position, normal vector, color, etc.) */
+    /* set VBO as currently bound GL_ARRAY_BUFFER (Vertex attributes) */
+    glBindBuffer(GL_ARRAY_BUFFER, *result.boundVBO);
+
+    glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vector3), &vertices[0], GL_STATIC_DRAW);
+
+
+    /* defines an array of generic vertex attribute data per each attribute. */
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vector3), (void*)0);
+    /* enables the generic vertex attribute array specified by index. */
+
     /* element buffer object allows to reuse vertex data without duplicating all attributes values */
-    /* returns buffer object name in EBO */
-    glGenBuffers(result.getBoundEBOCount(), result.boundEBO);
     /* set EBO as currently bound GL_ELEMENT_ARRAY_BUFFER (Vertex array indices) */
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, *result.boundEBO);
     /* creates and initializes a buffer object's data store.
     With GL_STATIC_DRAW data store contents will be modified once and used many times as the source for GL drawing commands. */
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), &indices[0], GL_STATIC_DRAW);
 
-    /* vertex buffer object provides methods for uploading vertex data (position, normal vector, color, etc.) */
-    /* returns buffer object name in VBO */
-    glGenBuffers(result.getBoundVBOCount(), result.boundVBO);
-    /* set VBO as currently bound GL_ARRAY_BUFFER (Vertex attributes) */
-    glBindBuffer(GL_ARRAY_BUFFER, *result.boundVBO);
-
-    glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vector3), &vertices[0], GL_STATIC_DRAW);
-    /* defines an array of generic vertex attribute data per each attribute. */
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vector3), (void*)0);
-    /* enables the generic vertex attribute array specified by index. */
     glEnableVertexAttribArray(0);
     return result;
 }
