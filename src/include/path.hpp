@@ -1,5 +1,5 @@
 #include <glad/glad.h>
-#include <fstream>
+#include <string> 
 
 enum PathNodeType { configJson, vertexShader, fragmentShader };
 

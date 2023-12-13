@@ -1,6 +1,6 @@
 #include "path.hpp"
 #include <nlohmann-json/json.hpp>
-#include <iostream> 
+#include <iostream>
 
 struct PathNode 
 {

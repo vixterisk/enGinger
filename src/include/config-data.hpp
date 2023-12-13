@@ -1,4 +1,4 @@
-#include "nlohmann-json/json.hpp"
+#include <string>
 
 struct ConfigData
 {

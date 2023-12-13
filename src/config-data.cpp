@@ -1,5 +1,7 @@
 #include "config-data.hpp"
+#include "nlohmann-json/json.hpp"
 #include "path.hpp"
+#include <fstream>
 
 void readValue(nlohmann::json data, std::string jsonKey, int &result)
 {
