@@ -2,6 +2,7 @@
 #include <vector>
 #include "geometry/point.hpp"
 
+// TODO perenesti
 class VertexArrayData
 {
 private:
@@ -34,9 +35,15 @@ public:
     {
         return boundEBOCount;
     }
+    void deleteVertexArrayData()
+    {
+        free(boundVAO);
+        free(boundVBO);
+        free(boundEBO);
+    }
 };
 
-VertexArrayData getVertexArrayData(std::vector<Vector3> vertices, std::vector<GLuint> indices);
+VertexArrayData getVertexArrayData(Matrix vertices, std::vector<GLuint> indices);
 
 void clearAllBuffers();
 

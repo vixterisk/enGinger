@@ -6,7 +6,7 @@ specifies how to send the data to the graphics card.
 
 P.S. Sending data to the graphics card from the CPU is relatively slow, so whenever is possible it's best to send as much data as possible at once.
 Once the data is in the graphics card's memory the vertex shader has almost instant access to the vertices making it extremely fast.*/
-VertexArrayData getVertexArrayData(std::vector<Vector3> vertices, std::vector <GLuint> indices)
+VertexArrayData getVertexArrayData(Matrix vertices, std::vector <GLuint> indices)
 {
     VertexArrayData result = VertexArrayData(1, 1, 1);
     /* A Vertex Array Object (or VAO) is an object that describes how the vertex attributes are stored in a Vertex Buffer Object (or VBO) */
@@ -64,5 +64,6 @@ void cleanGlResources(VertexArrayData vertexArrayData, GLuint shaderProgram)
     glDeleteVertexArrays(vertexArrayData.getBoundVAOCount(), vertexArrayData.boundVAO);
     glDeleteBuffers(vertexArrayData.getBoundVBOCount(), vertexArrayData.boundVBO);
     glDeleteBuffers(vertexArrayData.getBoundEBOCount(), vertexArrayData.boundEBO);
+    vertexArrayData.deleteVertexArrayData();
     glDeleteProgram(shaderProgram);
 }

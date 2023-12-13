@@ -11,7 +11,7 @@ instead of top-left. Eventually all the (transformed) coordinates should end up 
 These coordinates will then be transformed to screen-space coordinates (via the viewport transform). The resulting screen-space coordinates 
 are then transformed to fragments as inputs to fragment shader. */
 
-std::vector<Vector3> vertices = 
+Matrix vertices =
 {
    { 0.5f, 0.5f, 0.0f },
    { 0.5f, -0.5f, 0.0f },
