@@ -1,7 +1,7 @@
-#pragma once
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include <nlohmann-json/json.hpp>
+#include <string>
+#include <vector>
 #include "geometry/point.hpp"
 
 void exitWhenNull(bool isNull, std::string errorMessage);

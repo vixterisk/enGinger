@@ -1,5 +1,5 @@
 #include "glfw-utils.hpp"
-#include <iostream> 
+#include <iostream>
 #include "path.hpp"
 
 void exitWhenNull(bool isNull, std::string errorMessage)

@@ -1,4 +1,3 @@
-#pragma once
 #include "shader-program.hpp"
 #include <iostream> 
 #include <fstream>
