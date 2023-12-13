@@ -1,3 +1,7 @@
+#include <glad/glad.h>
+#include <vector>
+#include "geometry/point.hpp"
+
 class VertexArrayData
 {
 private:
