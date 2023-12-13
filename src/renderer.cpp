@@ -1,4 +1,3 @@
-
 #include "renderer.hpp"
 
 /* Creates memory on the GPU to store vertex data ( via so called vertex buffer objects (VBO) ) as large batches of data,
