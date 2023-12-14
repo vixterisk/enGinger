@@ -1,9 +1,0 @@
-вода
-материалы (с отражением - кубомапы?)
-мягкие частицы
-https://developer.nvidia.com/sites/all/modules/custom/gpugems/books/GPUGems/gpugems_ch41.html
-инстансинг
-курсор из обоев
-блики света
-блум
-френель шейдер

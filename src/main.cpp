@@ -47,7 +47,8 @@ int main(int argc, char* argv[])
     GLFWwindow* window = createWindow("enGinger", data.fullscreen, data.borderless, data.width, data.height);
     exitWhenNull(!window, "Failed to create GLFW window.");
 
-    VertexArrayData vertexArrayData = getVertexArrayData(triangle2, indices2);
+    VertexArrayData vertexArrayData = getVertexArrayData(triangle, indices);
+    VertexArrayData vertexArrayData1 = getVertexArrayData(triangle2, indices2);
     exitWhenNull(!vertexArrayData.boundVAO, "Failed to create Vertex Array Object.");
 
     std::string vertexShaderPath = getShaderAbsolutePath(GL_VERTEX_SHADER, data.vertexShader);
@@ -62,6 +63,7 @@ int main(int argc, char* argv[])
         //std::cout << glfwGetTime() << "\n";
         clearAllBuffers();
         draw(shaderProgram, *vertexArrayData.boundVAO, indices.size());
+        draw(shaderProgram, *vertexArrayData1.boundVAO, indices.size());
         /* This function processes only those events that are already in the event queue and then returns immediately. 
         Processing events will cause the window and input callbacks associated with those events to be called. */
         glfwPollEvents();
