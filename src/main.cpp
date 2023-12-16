@@ -11,7 +11,7 @@ instead of top-left. Eventually all the (transformed) coordinates should end up 
 These coordinates will then be transformed to screen-space coordinates (via the viewport transform). The resulting screen-space coordinates 
 are then transformed to fragments as inputs to fragment shader. */
 
-Matrix triangle =
+std::vector<Vector3> triangle =
 {
    { -0.2f, -0.2f, 0.0f },
    { 0.2f, -0.2f, 0.0f },

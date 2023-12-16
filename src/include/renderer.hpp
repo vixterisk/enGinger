@@ -43,7 +43,7 @@ public:
     }
 };
 
-VertexArrayData getVertexArrayData(Matrix vertices, std::vector<GLuint> indices);
+VertexArrayData getVertexArrayData(std::vector<Vector3> vertices, std::vector<GLuint> indices);
 
 void clearAllBuffers();
 

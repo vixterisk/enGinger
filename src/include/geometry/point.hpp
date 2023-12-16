@@ -10,5 +10,3 @@ struct Vector3
     //    }
     //}
 };
-
-typedef std::vector<Vector3> Matrix;
