@@ -1,7 +1,8 @@
 Vertex attributes
-| | | | |V|E|R|T|E|X|1| | |
+
+| | | | |V|E|R|T|E|X||||
 |-|-|-|-|-|-|-|-|-|-|-|-|-|
-|Position:|x|y|z| | | | | | | | | |
-|Color:| | | |r|g|b|a| | | | | |
-|Texture Coord.:| | | | | | | |u|v| | | |
+|Position:|x|y|z||||||||||
+|Color:| | | |r|g|b|a||||||
+|Texture Coord.:| | | | | | | |u|v||||
 |Normal:| | | | | | | | | |x<sub>n</sub>|y<sub>n</sub>|z<sub>n</sub>|

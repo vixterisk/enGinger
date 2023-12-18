@@ -2,7 +2,7 @@
 #include <GLFW/glfw3.h>
 #include <string>
 
-void exitWhenNull(bool isNull, std::string errorMessage);
+void exitWhenNull(bool isNull, const std::string& errorMessage);
 
 void initGLFW();
 

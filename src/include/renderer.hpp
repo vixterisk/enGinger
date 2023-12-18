@@ -24,19 +24,13 @@ public:
         boundEBO = (GLuint*)malloc(EBOCount * sizeof(GLuint));
     }
 
-    int getBoundVAOCount()
-    {
-        return boundVAOCount;
-    }
-    int getBoundVBOCount()
-    {
-        return boundVBOCount;
-    }
-    int getBoundEBOCount()
-    {
-        return boundEBOCount;
-    }
-    void deleteVertexArrayData()
+    int getBoundVAOCount() const { return boundVAOCount; }
+
+    int getBoundVBOCount() const { return boundVBOCount; }
+
+    int getBoundEBOCount() const { return boundEBOCount; }
+    
+    void deleteVertexArrayData() const
     {
         free(boundVAO);
         free(boundVBO);

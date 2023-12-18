@@ -11,7 +11,7 @@ unsigned int createShader(GLenum shaderType, const char* shaderSource)
 	/* creates an empty shader object and returns a non-zero value by which it can be referenced */
 	shader = glCreateShader(shaderType);
 	/* Replaces the source code in a shader object*/
-	glShaderSource(shader, 1, &shaderSource, NULL);
+	glShaderSource(shader, 1, &shaderSource, nullptr);
 	/* Compiles a shader object with compilation status stored as part of the shader object's state (GL_COMPILE_STATUS) */
 	glCompileShader(shader);
 	int  success;
@@ -21,7 +21,7 @@ unsigned int createShader(GLenum shaderType, const char* shaderSource)
 	if (!success)
 	{
 		/* returns the shader object's information log modified when the shader is compiled */
-		glGetShaderInfoLog(shader, 512, NULL, infoLog);
+		glGetShaderInfoLog(shader, 512, nullptr, infoLog);
 		const char* shaderTypeChar;
 		if (shaderType == GL_VERTEX_SHADER)
 			shaderTypeChar = "Vertex shader";
@@ -55,7 +55,7 @@ GLuint createShaderProgram(const char* vertexShaderSource, const char* fragmentS
 	glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
 	if (!success)
 	{
-		glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
+		glGetProgramInfoLog(shaderProgram, 512, nullptr, infoLog);
 		// TODO �������� ��������� ������ �� �������������
 		std::cout << "::Error: shader program compilation failed\n" << infoLog << std::endl;
 	}
@@ -66,7 +66,7 @@ GLuint createShaderProgram(const char* vertexShaderSource, const char* fragmentS
 	return shaderProgram;
 }
 
-const char* readShaderFromFile(std::string shaderPath)
+const char* readShaderFromFile(const std::string& shaderPath)
 {
 	std::ifstream file(shaderPath);
 	if (!file)
@@ -87,7 +87,7 @@ const char* readShaderFromFile(std::string shaderPath)
 
 /* Reads vertex shader located in 'resources/shaders/vertexShaderName' 
 and fragment shader located in 'resourcess/shaders/fragmentShaderName', then creates shader program from these shaders */
-GLuint createShaderProgramUsingFile(std::string vertexShaderAbsolutePath, std::string fragmentShaderAbsolutePath)
+GLuint createShaderProgramUsingFile(const std::string& vertexShaderAbsolutePath, const std::string& fragmentShaderAbsolutePath)
 {
 	const char* vertexShaderSource = readShaderFromFile(vertexShaderAbsolutePath);
 	const char* fragmentShaderSource = readShaderFromFile(fragmentShaderAbsolutePath);

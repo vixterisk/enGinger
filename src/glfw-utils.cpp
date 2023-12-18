@@ -5,11 +5,11 @@
 #include <vector>
 #include "geometry/vertex-utils.hpp"
 
-void exitWhenNull(bool isNull, std::string errorMessage)
+void exitWhenNull(bool isNull, const std::string& errorMessage)
 {
     if (isNull)
     {
-        if (errorMessage != "")
+        if (!errorMessage.empty())
             std::cout << errorMessage << "\n";
         glfwTerminate();
         exit(EXIT_FAILURE);

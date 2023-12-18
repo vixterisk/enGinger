@@ -3,19 +3,19 @@
 #include "path.hpp"
 #include <fstream>
 
-void readValue(nlohmann::json data, std::string jsonKey, int &result)
+void readValue(nlohmann::json data, const std::string& jsonKey, int &result)
 {
     nlohmann::json value = data[jsonKey];
     result = value.template get<int>();
 }
 
-void readValue(nlohmann::json data, std::string jsonKey, std::string &result)
+void readValue(nlohmann::json data, const std::string& jsonKey, std::string &result)
 {
     nlohmann::json value = data[jsonKey];
     result = value.template get<std::string>();
 }
 
-void readValue(nlohmann::json data, std::string jsonKey, bool &result)
+void readValue(nlohmann::json data, const std::string& jsonKey, bool &result)
 {
     nlohmann::json value = data[jsonKey];
     result = value.template get<bool>();

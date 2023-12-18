@@ -20,14 +20,14 @@ struct Color
     GLfloat a;
 
     Color() {}
-    static constexpr Color black() { return Color(0, 0, 0); }
-    static constexpr Color white() { return Color(1.0f, 1.0f, 1.0f); }
-    static constexpr Color red() { return Color(1.0f, 0, 0); }
-    static constexpr Color green() { return Color(0, 1.0f, 0); }
-    static constexpr Color blue() { return Color(0, 0, 1.0f); }
-    static constexpr Color yellow() { return Color(1.0f, 1.0f, 0); }
-    static constexpr Color magenta() { return Color(1.0f, 0, 1.0f); }
-    static constexpr Color cyan() { return Color(0, 1.0f, 1.0f); }
+    static constexpr Color black() { return {0, 0, 0}; }
+    static constexpr Color white() { return {1.0f, 1.0f, 1.0f}; }
+    static constexpr Color red() { return {1.0f, 0, 0}; }
+    static constexpr Color green() { return {0, 1.0f, 0}; }
+    static constexpr Color blue() { return {0, 0, 1.0f}; }
+    static constexpr Color yellow() { return {1.0f, 1.0f, 0}; }
+    static constexpr Color magenta() { return {1.0f, 0, 1.0f}; }
+    static constexpr Color cyan() { return {0, 1.0f, 1.0f}; }
     constexpr Color(GLfloat r, GLfloat g, GLfloat b, GLfloat a = 1.0f) : r(r), g(g), b(b), a(a) {}
 };
 
