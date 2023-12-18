@@ -1,7 +1,6 @@
 #include "renderer.hpp"
-#include "glfw/glfw3.h"
 
-/* Creates memory on the GPU to store vertex data ( via so called vertex buffer objects (VBO) ) as large batches of data,
+/* Creates memory on the GPU to store vertex data ( via so-called vertex buffer objects (VBO) ) as large batches of data,
 configures how OpenGL should interpret the said memory,
 specifies how to send the data to the graphics card.
 

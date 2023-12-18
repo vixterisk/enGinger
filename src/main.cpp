@@ -26,7 +26,7 @@ std::vector<Vertex> generateTriangle()
     return std::vector<Vertex> { vertex1, vertex2, vertex3, vertex4 };
 }
 
-int main(int argc, char* argv[])
+int main(int, char*[])
 {
     std::vector<Vertex> triangle = generateTriangle();
 
@@ -51,7 +51,7 @@ int main(int argc, char* argv[])
     GLuint shaderProgram = createShaderProgramUsingFile(vertexShaderPath, fragmentShaderPath);
     exitWhenNull(!shaderProgram, "Failed to create shader program.");
     glUseProgram(shaderProgram);
-    /* Frame -  All drawcalls here*/
+    /* Frame -  All draw calls here*/
     ShowWindow(GetConsoleWindow(), SW_HIDE);
     while (!glfwWindowShouldClose(window))
     {

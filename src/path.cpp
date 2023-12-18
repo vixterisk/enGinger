@@ -1,11 +1,12 @@
 #include "path.hpp"
 #include <nlohmann-json/json.hpp>
 #include <iostream>
+#include <utility>
 
 struct PathNode 
 {
     std::string name;
-    PathNode *parent;
+    PathNode *parent = nullptr;
     std::vector<PathNode*> children;
 };
 
@@ -32,7 +33,7 @@ Path path;
 PathNode *createPath(std::string name, PathNode *parent) 
 {
     PathNode *newPath = new PathNode();
-    newPath->name = name;
+    newPath->name = std::move(name);
     newPath->parent = parent;
     if (parent) parent->children.push_back(newPath);
     return newPath;
@@ -40,19 +41,19 @@ PathNode *createPath(std::string name, PathNode *parent)
 
 std::string getSrcPathEnvVar()
 {
-    const unsigned short int PATHBUFFERSIZE = 100;
-    char srcPath[PATHBUFFERSIZE];
-    const char* engingeSrcPath = "ENGINGER_SRC_PATH";
+    const unsigned short int pathBufferSize = 100;
+    char srcPath[pathBufferSize];
+    const char* engingerSrcPath = "ENGINGER_SRC_PATH";
 
-    if (!getenv(engingeSrcPath))
+    if (!getenv(engingerSrcPath))
     {
-        std::cout << "The environment variable " << engingeSrcPath << " was not found.\n" << std::endl;
+        std::cout << "The environment variable " << engingerSrcPath << " was not found.\n" << std::endl;
         exit(EXIT_FAILURE);
     }
 
-    if (snprintf(srcPath, PATHBUFFERSIZE, "%s", getenv(engingeSrcPath)) >= PATHBUFFERSIZE)
+    if (snprintf(srcPath, pathBufferSize, "%s", getenv(engingerSrcPath)) >= pathBufferSize)
     {
-        std::cout << "Path buffer size of " << PATHBUFFERSIZE << " was too small. Aborting\n" << std::endl;
+        std::cout << "Path buffer size of " << pathBufferSize << " was too small. Aborting\n" << std::endl;
         exit(EXIT_FAILURE);
     }
     return srcPath;
@@ -61,18 +62,18 @@ std::string getSrcPathEnvVar()
 void initializePath() 
 {
     std::string srcPath = getSrcPathEnvVar();
-    path.rootPath = createPath(srcPath, NULL);
+    path.rootPath = createPath(srcPath, nullptr);
     path.resourcesPath = createPath("resources", path.rootPath);
     path.shadersPath = createPath("shaders", path.resourcesPath);
-    path.vertexShaderPath = NULL;
-    path.fragmentShaderPath = NULL;
+    path.vertexShaderPath = nullptr;
+    path.fragmentShaderPath = nullptr;
     path.configPath = createPath("config.json", path.rootPath);
 }
 
 
-void addShaderToPath(GLenum shaderType, std::string shaderName) 
+void addShaderToPath(GLenum shaderType, const std::string& shaderName)
 {
-    if (path.rootPath == NULL)
+    if (path.rootPath == nullptr)
         initializePath();
 
     for (int i = 0; i < path.shadersPath->children.size(); i++)
@@ -86,9 +87,9 @@ void addShaderToPath(GLenum shaderType, std::string shaderName)
         path.fragmentShaderPath = shaderPathNode;
 }
 
-std::string getAbsolutePath(PathNode* path, PathNodeType type)
+std::string getAbsolutePath(PathNode* currPath, PathNodeType type)
 {
-    if (path == NULL)
+    if (currPath == nullptr)
     {
         std::cout << "Path for " << pathNodeName[type] << " does not exist. Aborting... " << std::endl;
         exit(EXIT_FAILURE);
@@ -100,13 +101,13 @@ std::string getAbsolutePath(PathNode* path, PathNodeType type)
 #else
         '/';
 #endif
-    std::string parentName = path->parent == NULL ? "" : getAbsolutePath(path->parent, type) + pathSeparator;
-    return parentName + path->name;
+    std::string parentName = currPath->parent == nullptr ? "" : getAbsolutePath(currPath->parent, type) + pathSeparator;
+    return parentName + currPath->name;
 }
 
 std::string getAbsolutePath(PathNodeType type) 
 {
-    if (path.rootPath == NULL)
+    if (path.rootPath == nullptr)
         initializePath();
 
     switch (type)
@@ -118,11 +119,11 @@ std::string getAbsolutePath(PathNodeType type)
         case fragmentShader:
             return getAbsolutePath(path.fragmentShaderPath, type);
         default:
-            return NULL;
+            exit(EXIT_FAILURE);
     }
 }
 
-std::string getShaderAbsolutePath(GLenum shaderType, std::string vertexShaderName)
+std::string getShaderAbsolutePath(GLenum shaderType, const std::string& vertexShaderName)
 {
     PathNodeType ShaderPathNodeType;
     if (shaderType == GL_VERTEX_SHADER)

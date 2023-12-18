@@ -16,7 +16,7 @@ void exitWhenNull(bool isNull, const std::string& errorMessage)
     }
 }
 
-void errorCallback(int code, const char* desc)
+void errorCallback(int, const char* desc)
 {
     fputs(desc, stderr);
 }
@@ -27,7 +27,7 @@ void setViewport(int width, int height)
 }
 
 /* Window resize callback*/
-void framebufferResizeCallback(GLFWwindow* window, int width, int height)
+void framebufferResizeCallback(GLFWwindow*, int width, int height)
 {
     /** sets the viewport (a rectangle in pixels on the screen that you wish to render to), transforms NDC coordinates to screen coordinates.
     OpenGL will automatically scale the rendering so it fits into the given viewport. */
@@ -52,7 +52,7 @@ void initGLFW()
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 }
 
-void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
+void keyCallback(GLFWwindow* window, int key, int, int action, int)
 {
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
@@ -79,7 +79,7 @@ GLFWwindow* createWindow(const char* windowName, bool isFullscreen, bool isBorde
         width = mode->width;
         height = mode->height;
     }
-    GLFWwindow* window = glfwCreateWindow(width, height, windowName, isFullscreen ? monitor : NULL, NULL);
+    GLFWwindow* window = glfwCreateWindow(width, height, windowName, isFullscreen ? monitor : nullptr, nullptr);
     exitWhenNull(!window, "::Failed to create GLFW window");
     /* In order for any OpenGL commands to work, a context must be current */
     glfwMakeContextCurrent(window); 

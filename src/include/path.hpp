@@ -3,8 +3,8 @@
 
 enum PathNodeType { configJson, vertexShader, fragmentShader };
 
-void addShaderToPath(GLenum shaderType, std::string shaderName);
+void addShaderToPath(GLenum shaderType, const std::string& shaderName);
 
 std::string getAbsolutePath(PathNodeType type);
 
-std::string getShaderAbsolutePath(GLenum shaderType, std::string jsonKey);
+std::string getShaderAbsolutePath(GLenum shaderType, const std::string& jsonKey);

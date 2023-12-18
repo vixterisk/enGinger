@@ -51,10 +51,10 @@ GLuint createShaderProgram(const char* vertexShaderSource, const char* fragmentS
 	glLinkProgram(shaderProgram);
 
 	int  success;
-	char infoLog[512];
 	glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
 	if (!success)
 	{
+        char infoLog[512];
 		glGetProgramInfoLog(shaderProgram, 512, nullptr, infoLog);
 		// TODO �������� ��������� ������ �� �������������
 		std::cout << "::Error: shader program compilation failed\n" << infoLog << std::endl;
@@ -72,20 +72,21 @@ const char* readShaderFromFile(const std::string& shaderPath)
 	if (!file)
 	{
 		// TODO �������� ��������� ������ �� �������������
-		std::cout << "::Error: shader file reading failed. " << strerror(errno);
+        char infoLog[512];
+		std::cout << "::Error: shader file reading failed. " << strerror_s(infoLog, errno);
 		return nullptr;
 	}
 	std::stringstream buffer;
 	buffer << file.rdbuf();
 	file.close();
 	std::string stringBuffer = buffer.str();
-	int bufferLength = stringBuffer.length();
+    int bufferLength = stringBuffer.length();
 	char* result = new char[bufferLength];
 	memcpy(result, stringBuffer.c_str(), bufferLength * sizeof(char) + 1);
 	return result;
 }
 
-/* Reads vertex shader located in 'resources/shaders/vertexShaderName' 
+/* Reads vertex shader located in 'resources/shaders/vertexShaderName'
 and fragment shader located in 'resourcess/shaders/fragmentShaderName', then creates shader program from these shaders */
 GLuint createShaderProgramUsingFile(const std::string& vertexShaderAbsolutePath, const std::string& fragmentShaderAbsolutePath)
 {
