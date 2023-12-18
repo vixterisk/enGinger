@@ -1,5 +1,6 @@
 #include <glad/glad.h>
 #include <vector>
+#include <cstdlib>
 #include "geometry/vertex-utils.hpp"
 
 // TODO perenesti
