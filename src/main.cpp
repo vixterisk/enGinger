@@ -69,5 +69,7 @@ int main(int, char*[])
     glfwDestroyWindow(window);
     glfwTerminate();
 
+    deletePath();
+
     return EXIT_SUCCESS;
 }

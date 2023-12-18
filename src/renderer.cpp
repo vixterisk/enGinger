@@ -1,5 +1,14 @@
 #include "renderer.hpp"
 
+int attributeCount = 0;
+
+void enableVertexAttributeFloat(GLint size, void* pointer)
+{
+    glVertexAttribPointer(attributeCount, size, GL_FLOAT, GL_FALSE, sizeof(Vertex), pointer);
+    glEnableVertexAttribArray(attributeCount);
+    attributeCount++;
+}
+
 /* Creates memory on the GPU to store vertex data ( via so-called vertex buffer objects (VBO) ) as large batches of data,
 configures how OpenGL should interpret the said memory,
 specifies how to send the data to the graphics card.
@@ -35,17 +44,13 @@ VertexArrayData getVertexArrayData(std::vector<Vertex> vertices, std::vector <GL
 
     /* defines an array of generic vertex attribute data per each attribute. */
     //position attribute
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
-    glEnableVertexAttribArray(0);
+    enableVertexAttributeFloat( sizeof(Position{}) / sizeof (GLfloat), (void*)0);
     //color attribute
-    glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(sizeof(Position)));
-    glEnableVertexAttribArray(1);
+    enableVertexAttributeFloat(sizeof(Color{}) / sizeof (GLfloat), (void*)(sizeof(Position)));
     //uv coordinates attribute
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(sizeof(Color)));
-    glEnableVertexAttribArray(2);
+    enableVertexAttributeFloat(sizeof(UV{}) / sizeof (GLfloat), (void*)(sizeof(Color)));
     //normals attribute
-    glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(sizeof(UV)));
-    glEnableVertexAttribArray(3);
+    enableVertexAttributeFloat(sizeof(Position{}) / sizeof (GLfloat), (void*)(sizeof(UV)));
     /* enables the generic vertex attribute array specified by index. */
 
     return result;

@@ -30,6 +30,7 @@ std::map<PathNodeType, std::string> pathNodeName
 
 Path path;
 
+//clear memory
 PathNode *createPath(std::string name, PathNode *parent) 
 {
     PathNode *newPath = new PathNode();
@@ -38,6 +39,14 @@ PathNode *createPath(std::string name, PathNode *parent)
     if (parent) parent->children.push_back(newPath);
     return newPath;
 }
+
+void deletePath(PathNode *root)
+{
+    for (int i = 0; i < root->children.size(); i++)
+        deletePath(root->children[i]);
+}
+
+void deletePath() { deletePath(path.rootPath); }
 
 std::string getSrcPathEnvVar()
 {
