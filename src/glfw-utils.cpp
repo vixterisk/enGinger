@@ -3,7 +3,7 @@
 #include "path.hpp"
 #include <glad/glad.h>
 #include <vector>
-#include "geometry/point.hpp"
+#include "geometry/vertex-utils.hpp"
 
 void exitWhenNull(bool isNull, std::string errorMessage)
 {

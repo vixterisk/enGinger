@@ -1,6 +1,6 @@
 #include <glad/glad.h>
 #include <vector>
-#include "geometry/point.hpp"
+#include "geometry/vertex-utils.hpp"
 
 // TODO perenesti
 class VertexArrayData
@@ -43,7 +43,7 @@ public:
     }
 };
 
-VertexArrayData getVertexArrayData(std::vector<Vector3> vertices, std::vector<GLuint> indices);
+VertexArrayData getVertexArrayData(std::vector<Vertex> vertices, std::vector<GLuint> indices);
 
 void clearAllBuffers();
 

@@ -11,22 +11,30 @@ instead of top-left. Eventually all the (transformed) coordinates should end up 
 These coordinates will then be transformed to screen-space coordinates (via the viewport transform). The resulting screen-space coordinates 
 are then transformed to fragments as inputs to fragment shader. */
 
-std::vector<Vector3> triangle =
+std::vector<Vertex> generateTriangle()
 {
-   { -0.2f, -0.2f, 0.0f },
-   { 0.2f, -0.2f, 0.0f },
-   { 0.2f,  0.2f, 0.0f },
-   { -0.2f,  0.2f, 0.0f }
-};
-
-std::vector<GLuint> indices = 
-{
-   0, 1, 3,
-   1, 2, 3
-};
+    GLfloat left = -0.8f, bottom = -0.8f;
+    GLfloat right = 0.8f, top = 0.8f;
+    Position leftBottom = Position(left, bottom);
+    Position rightBottom = Position(right, bottom);
+    Position leftTop = Position(left, top);
+    Position rightTop = Position(right, top);
+    Vertex vertex1 = Vertex(leftBottom, Color::magenta(), UV(), Position());
+    Vertex vertex2 = Vertex(rightBottom, Color::cyan(), UV(), Position());
+    Vertex vertex3 = Vertex(leftTop, Color::yellow(), UV(), Position());
+    Vertex vertex4 = Vertex(rightTop, Color::white(), UV(), Position());
+    return std::vector<Vertex> { vertex1, vertex2, vertex3, vertex4 };
+}
 
 int main(int argc, char* argv[])
 {
+    std::vector<Vertex> triangle = generateTriangle();
+
+    std::vector<GLuint> indices =
+    {
+       0, 1, 2,
+       1, 2, 3
+    };
 
     initGLFW();
 
@@ -47,7 +55,6 @@ int main(int argc, char* argv[])
     ShowWindow(GetConsoleWindow(), SW_HIDE);
     while (!glfwWindowShouldClose(window))
     {
-        //std::cout << glfwGetTime() << "\n";
         clearAllBuffers();
         draw(shaderProgram, *vertexArrayData.boundVAO, indices.size());
         /* This function processes only those events that are already in the event queue and then returns immediately. 
