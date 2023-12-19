@@ -19,6 +19,8 @@ public:
     PathNode *vertexShaderPath;
     PathNode *fragmentShaderPath;
     PathNode *configPath;
+
+    bool isInitialized() { return rootPath != nullptr; }
 };
 
 std::map<PathNodeType, std::string> pathNodeName
@@ -42,6 +44,9 @@ PathNode *createPath(std::string name, PathNode *parent)
 
 void deletePath(PathNode *&root)
 {
+    if (root == nullptr)
+        return;
+
     while (root->children.size() != 0)
     {
         deletePath(root->children.front());
@@ -90,7 +95,7 @@ void initializePath()
 
 void addShaderToPath(GLenum shaderType, const std::string& shaderName)
 {
-    if (path.rootPath == nullptr)
+    if (!path.isInitialized())
         initializePath();
 
     for (int i = 0; i < path.shadersPath->children.size(); i++)
@@ -124,7 +129,7 @@ std::string getAbsolutePath(PathNode* currPath, PathNodeType type)
 
 std::string getAbsolutePath(PathNodeType type) 
 {
-    if (path.rootPath == nullptr)
+    if (!path.isInitialized())
         initializePath();
 
     switch (type)
