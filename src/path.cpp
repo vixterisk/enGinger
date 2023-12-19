@@ -42,11 +42,16 @@ PathNode *createPath(std::string name, PathNode *parent)
 
 void deletePath(PathNode *root)
 {
-    for (int i = 0; i < root->children.size(); i++)
-        deletePath(root->children[i]);
+    while (root->children.size() != 0)
+    {
+        deletePath(root->children.front());
+        root->children.erase(root->children.begin());
+    }
+    delete(root);
+    root = nullptr;
 }
 
-void deletePath() { deletePath(path.rootPath); }
+void deletePath() { if (&path != nullptr) deletePath(path.rootPath); }
 
 std::string getSrcPathEnvVar()
 {
