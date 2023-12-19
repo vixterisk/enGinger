@@ -21,6 +21,11 @@ public:
     PathNode *configPath;
 
     bool isInitialized() { return rootPath != nullptr; }
+    PathNode *getResourcePath() const { return resourcesPath; }
+    PathNode *getShadersPath() const { return shadersPath; }
+    PathNode *getVertexShaderPath() const { return vertexShaderPath; }
+    PathNode *getFragmentShaderPath() const { return fragmentShaderPath; }
+    PathNode *getConfigPath() const { return configPath; }
 };
 
 std::map<PathNodeType, std::string> pathNodeName
@@ -32,7 +37,6 @@ std::map<PathNodeType, std::string> pathNodeName
 
 Path path;
 
-//clear memory
 PathNode *createPath(std::string name, PathNode *parent) 
 {
     PathNode *newPath = new PathNode();
@@ -52,13 +56,19 @@ void deletePath(PathNode *&root)
         deletePath(root->children.front());
         root->children.erase(root->children.begin());
     }
+
     delete(root);
     root = nullptr;
 }
 
 void deletePath() { 
     deletePath(path.rootPath);
-    path.resourcesPath = path.shadersPath = path.vertexShaderPath = path.fragmentShaderPath = path.configPath = nullptr;
+    path.rootPath = nullptr;
+    path.resourcesPath = nullptr;
+    path.shadersPath = nullptr;
+    path.vertexShaderPath = nullptr;
+    path.fragmentShaderPath = nullptr;
+    path.configPath = nullptr;
 }
 
 std::string getSrcPathEnvVar()

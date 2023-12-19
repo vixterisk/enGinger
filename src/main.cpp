@@ -28,7 +28,6 @@ std::vector<Vertex> generateTriangle()
 
 int main(int, char*[])
 {
-    deletePath();
     std::vector<Vertex> triangle = generateTriangle();
 
     std::vector<GLuint> indices =
