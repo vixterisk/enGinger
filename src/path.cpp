@@ -40,7 +40,7 @@ PathNode *createPath(std::string name, PathNode *parent)
     return newPath;
 }
 
-void deletePath(PathNode *root)
+void deletePath(PathNode *&root)
 {
     while (root->children.size() != 0)
     {
@@ -51,7 +51,10 @@ void deletePath(PathNode *root)
     root = nullptr;
 }
 
-void deletePath() { if (&path != nullptr) deletePath(path.rootPath); }
+void deletePath() { 
+    deletePath(path.rootPath);
+    path.resourcesPath = path.shadersPath = path.vertexShaderPath = path.fragmentShaderPath = path.configPath = nullptr;
+}
 
 std::string getSrcPathEnvVar()
 {
