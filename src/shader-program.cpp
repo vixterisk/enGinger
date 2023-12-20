@@ -27,7 +27,7 @@ unsigned int createShader(GLenum shaderType, const char* shaderSource)
 			shaderTypeChar = "Vertex shader";
 		else
 			shaderTypeChar = "Fragment shader";
-		// TODO �������� ��������� ������ �� �������������
+		// TODO remove console print
 		std::cout << "::" << shaderTypeChar << ": compilation failed\n" << infoLog << std::endl;
 		return 0;
 	}
@@ -56,7 +56,7 @@ GLuint createShaderProgram(const char* vertexShaderSource, const char* fragmentS
 	{
         char infoLog[512];
 		glGetProgramInfoLog(shaderProgram, 512, nullptr, infoLog);
-		// TODO �������� ��������� ������ �� �������������
+        // TODO remove console print
 		std::cout << "::Error: shader program compilation failed\n" << infoLog << std::endl;
 	}
 	glDetachShader(shaderProgram, vertexShader);
@@ -71,7 +71,7 @@ const char* readShaderFromFile(const std::string& shaderPath)
 	std::ifstream file(shaderPath);
 	if (!file)
 	{
-		// TODO �������� ��������� ������ �� �������������
+        // TODO remove console print
         char infoLog[512];
 		std::cout << "::Error: shader file reading failed. " << strerror_s(infoLog, errno);
 		return nullptr;
