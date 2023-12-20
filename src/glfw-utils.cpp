@@ -1,6 +1,6 @@
 #include "glfw-utils.hpp"
 #include <iostream>
-#include "path.hpp"
+#include "filesystem-utils.hpp"
 #include <glad/glad.h>
 #include <vector>
 #include "geometry/vertex-utils.hpp"
