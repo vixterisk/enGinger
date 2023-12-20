@@ -3,22 +3,11 @@
 #include "path.hpp"
 #include <fstream>
 
-void readValue(nlohmann::json data, const std::string& jsonKey, int &result)
+template<class ConfigField>
+void readValue(nlohmann::json data, const std::string& jsonKey, ConfigField &result)
 {
     nlohmann::json value = data[jsonKey];
-    result = value.template get<int>();
-}
-
-void readValue(nlohmann::json data, const std::string& jsonKey, std::string &result)
-{
-    nlohmann::json value = data[jsonKey];
-    result = value.template get<std::string>();
-}
-
-void readValue(nlohmann::json data, const std::string& jsonKey, bool &result)
-{
-    nlohmann::json value = data[jsonKey];
-    result = value.template get<bool>();
+    result = value.template get<ConfigField>();
 }
 
 ConfigData readConfig()
