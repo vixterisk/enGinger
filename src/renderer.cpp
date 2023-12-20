@@ -2,9 +2,9 @@
 
 int attributeCount = 0;
 
-void enableVertexAttributeFloat(GLint size, void* pointer)
+void enableVertexAttributeFloat(GLint size, void* pointer, GLboolean normalized = GL_FALSE)
 {
-    glVertexAttribPointer(attributeCount, size, GL_FLOAT, GL_FALSE, sizeof(Vertex), pointer);
+    glVertexAttribPointer(attributeCount, size, GL_FLOAT, normalized, sizeof(Vertex), pointer);
     glEnableVertexAttribArray(attributeCount);
     attributeCount++;
 }
