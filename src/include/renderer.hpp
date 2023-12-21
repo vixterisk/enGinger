@@ -1,7 +1,6 @@
-#include <glad/glad.h>
+#include "geometry/vertex-utils.hpp"
 #include <vector>
 #include <cstdlib>
-#include "geometry/vertex-utils.hpp"
 
 class VertexArrayData                                                                                                    // TODO make decent class hpp/cpp division
 {
@@ -13,6 +12,7 @@ public:
     GLuint* boundVAO;
     GLuint* boundVBO;
     GLuint* boundEBO;
+
     VertexArrayData(int VAOCount, int VBOCount, int EBOCount)
     {
         boundVAOCount = VAOCount;                                                                                        // A Vertex Array Object (or VAO) is an object that describes how the vertex attributes are stored in a Vertex Buffer Object (or VBO).
@@ -39,8 +39,8 @@ public:
 
 VertexArrayData getVertexArrayData(std::vector<Vertex> vertices, std::vector<GLuint> indices);
 
-void clearAllBuffers();
-
 void draw(GLuint shaderProgram, GLuint VAO, int ElementsCount);
 
 void cleanGlResources(VertexArrayData vertexArrayData, GLuint shaderProgram);
+
+void clearAllBuffers();
