@@ -1,14 +1,12 @@
 #include "glfw-utils.hpp"
-#include <iostream>
 #include "filesystem-utils.hpp"
-#include <glad/glad.h>
-#include <vector>
 #include "geometry/vertex-utils.hpp"
+#include <iostream>
+#include <vector>
 
 void exitWhenNull(bool isNull, const std::string& errorMessage)
 {
-    if (isNull)
-    {
+    if (isNull) {
         if (!errorMessage.empty())
             std::cout << errorMessage << "\n";
         glfwTerminate();
@@ -26,30 +24,21 @@ void setViewport(int width, int height)
     glViewport(0, 0, width, height);
 }
 
-/* Window resize callback*/
-void framebufferResizeCallback(GLFWwindow*, int width, int height)
+void framebufferResizeCallback(GLFWwindow*, int width, int height)                                                       // Window resize callback.
 {
-    /** sets the viewport (a rectangle in pixels on the screen that you wish to render to), transforms NDC coordinates to screen coordinates.
-    OpenGL will automatically scale the rendering so it fits into the given viewport. */
-    setViewport(width, height);
+    setViewport(width, height);                                                                                          // sets the viewport (a rectangle in pixels on the screen that you wish to render to), transforms NDC coordinates to screen coordinates. OpenGL will automatically scale the rendering so it fits into the given viewport.
 }
 
 void initGLFW()
 {
     glfwSetErrorCallback(errorCallback);
-    /* This function initializes the GLFW library.Before most GLFW functions can be used, GLFW must be initialized
-    (GLFW provides programmers with the ability to create and manage windows and OpenGL contexts,
-    as well as handle joystick, keyboard and mouse input.) */
-    if (!glfwInit())
+
+    if (!glfwInit())                                                                                                     // This function initializes the GLFW library.Before most GLFW functions can be used, GLFW must be initialized (GLFW provides programmers with the ability to create and manage windows and OpenGL contexts, as well as handle joystick, keyboard and mouse input.).
         exit(EXIT_FAILURE);
-    /* There are a number of hints that can be set before the creation of a window and context.
-    Some affect the window itself, others affect the framebuffer or context.
-    Hints below specify the client API version that the created context must be compatible with. */
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);                                                            // There are a number of hints that can be set before the creation of a window and context. Some affect the window itself, others affect the framebuffer or context. Hints below specify the client API version that the created context must be compatible with.
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    /* This hint specifies which OpenGL profile to create the context for.
-    Core-profile gets access to a smaller subset of OpenGL features without backwards-compatible features we don't need. */
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);                                            // This hint specifies which OpenGL profile to create the context for. Core-profile gets access to a smaller subset of OpenGL features without backwards-compatible features we don't need.
 }
 
 void keyCallback(GLFWwindow* window, int key, int, int action, int)
@@ -72,19 +61,21 @@ void mouseCallback(GLFWwindow* window, double x, double y)
 GLFWwindow* createWindow(const char* windowName, bool isFullscreen, bool isBorderless, int width, int height)
 {
     glfwWindowHint(GLFW_DECORATED, !isBorderless);
+
     GLFWmonitor* monitor = glfwGetPrimaryMonitor();
     const GLFWvidmode* mode = glfwGetVideoMode(monitor);
-    if (isFullscreen)
-    {
+    if (isFullscreen) {
         width = mode->width;
         height = mode->height;
     }
-    GLFWwindow* window = glfwCreateWindow(width, height, windowName, isFullscreen ? monitor : nullptr, nullptr);
+    else
+        monitor = nullptr;
+
+    GLFWwindow* window = glfwCreateWindow(width, height, windowName, monitor, nullptr);
     exitWhenNull(!window, "::Failed to create GLFW window");
-    /* In order for any OpenGL commands to work, a context must be current */
-    glfwMakeContextCurrent(window); 
-    if (!isFullscreen)
-    {
+
+    glfwMakeContextCurrent(window);                                                                                     // In order for any OpenGL commands to work, a context must be current.
+    if (!isFullscreen) {
         glfwSetWindowPos(window, mode->width / 2 - width / 2, mode->height / 2 - height / 2);
     }
 
@@ -99,8 +90,7 @@ GLFWwindow* createWindow(const char* windowName, bool isFullscreen, bool isBorde
 //#endif
     setViewport(width, height);
 
-    /* Sets the framebuffer resize callback for the specified window. */
-    glfwSetFramebufferSizeCallback(window, framebufferResizeCallback);
+    glfwSetFramebufferSizeCallback(window, framebufferResizeCallback);                                           // Sets the framebuffer resize callback for the specified window.
     glfwSetKeyCallback(window, keyCallback);
     glfwSetCursorPosCallback(window, mouseCallback);
     glfwSwapInterval(1);
