@@ -8,8 +8,8 @@
 
 std::map<GLuint , std::string> shaderTypeName
 {
-        { GL_VERTEX_SHADER, "Vertex shader" },
-        { GL_FRAGMENT_SHADER, "Fragment shader" }
+    { GL_VERTEX_SHADER, "Vertex shader" },
+    { GL_FRAGMENT_SHADER, "Fragment shader" }
 };
 
 unsigned int createShader(GLenum shaderType, const char* shaderSource)                                                   // Creates glsl shader needed type from given shader source code.
@@ -20,8 +20,7 @@ unsigned int createShader(GLenum shaderType, const char* shaderSource)          
 
     int  success;
 	glGetShaderiv(shader, GL_COMPILE_STATUS, &success);                                                                  // Reads parameter GL_COMPILE_STATUS value from shader into success.
-	if (!success)
-	{
+	if (!success) {
         char infoLog[512];
 		glGetShaderInfoLog(shader, 512, nullptr, infoLog);                                                               // Returns the shader object's information log modified when the shader is compiled.
 		std::cout << "::" << shaderTypeName[shaderType] << ": compilation failed\n" << infoLog << std::endl;
@@ -43,8 +42,7 @@ GLuint createShaderProgram(const char* vertexShaderSource, const char* fragmentS
                                                                                                                          // The status of the link operation will be stored as part of the program object's state (GL_LINK_STATUS), and can fail for a number of reasons.
     int  success;                                                                                                        // more information can be obtained at https://registry.khronos.org/OpenGL-Refpages/gl4/html/glLinkProgram.xhtml
 	glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
-	if (!success)
-	{
+	if (!success) {
         char infoLog[512];
 		glGetProgramInfoLog(shaderProgram, 512, nullptr, infoLog);
 		std::cout << "::Error: shader program compilation failed\n" << infoLog << std::endl;
@@ -61,8 +59,7 @@ GLuint createShaderProgram(const char* vertexShaderSource, const char* fragmentS
 const char* readShaderFromFile(const std::string& shaderPath)
 {
 	std::ifstream file(shaderPath);
-	if (!file)
-	{
+	if (!file) {
         char infoLog[512];
 		std::cout << "::Error: shader file reading failed. " << strerror_s(infoLog, errno);               // TODO change all std::cout to log system?
 		return nullptr;

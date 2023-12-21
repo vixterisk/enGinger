@@ -16,9 +16,9 @@ public:
     GLuint *boundEBO;
     VertexArrayData(int VAOCount, int VBOCount, int EBOCount)
     {
-        boundVAOCount = VAOCount;
-        boundVBOCount = VBOCount;
-        boundEBOCount = EBOCount;
+        boundVAOCount = VAOCount;                                                                                        // A Vertex Array Object (or VAO) is an object that describes how the vertex attributes are stored in a Vertex Buffer Object (or VBO).
+        boundVBOCount = VBOCount;                                                                                        // Vertex buffer object provides methods for uploading vertex data (position, normal vector, color, etc.).
+        boundEBOCount = EBOCount;                                                                                        // Element buffer object allows to reuse vertex data without duplicating all attributes values.
         boundVAO = (GLuint*)malloc(VAOCount * sizeof(GLuint));
         boundVBO = (GLuint*)malloc(VBOCount * sizeof(GLuint));
         boundEBO = (GLuint*)malloc(EBOCount * sizeof(GLuint));
