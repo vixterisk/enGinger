@@ -1576,9 +1576,9 @@ typedef void (* GLFWcharfun)(GLFWwindow* window, unsigned int codepoint);
  */
 typedef void (* GLFWcharmodsfun)(GLFWwindow* window, unsigned int codepoint, int mods);
 
-/*! @brief The function pointer type for path drop callbacks.
+/*! @brief The function pointer type for sourceTree drop callbacks.
  *
- *  This is the function pointer type for path drop callbacks.  A path drop
+ *  This is the function pointer type for sourceTree drop callbacks.  A sourceTree drop
  *  callback function has the following signature:
  *  @code
  *  void function_name(GLFWwindow* window, int path_count, const char* paths[])
@@ -1586,9 +1586,9 @@ typedef void (* GLFWcharmodsfun)(GLFWwindow* window, unsigned int codepoint, int
  *
  *  @param[in] window The window that received the event.
  *  @param[in] path_count The number of dropped paths.
- *  @param[in] paths The UTF-8 encoded file and/or directory path names.
+ *  @param[in] paths The UTF-8 encoded file and/or directory sourceTree names.
  *
- *  @pointer_lifetime The path array and its strings are valid until the
+ *  @pointer_lifetime The sourceTree array and its strings are valid until the
  *  callback function returns.
  *
  *  @sa @ref path_drop
@@ -4805,12 +4805,12 @@ GLFWAPI GLFWcursorenterfun glfwSetCursorEnterCallback(GLFWwindow* window, GLFWcu
  */
 GLFWAPI GLFWscrollfun glfwSetScrollCallback(GLFWwindow* window, GLFWscrollfun callback);
 
-/*! @brief Sets the path drop callback.
+/*! @brief Sets the sourceTree drop callback.
  *
- *  This function sets the path drop callback of the specified window, which is
+ *  This function sets the sourceTree drop callback of the specified window, which is
  *  called when one or more dragged paths are dropped on the window.
  *
- *  Because the path array and its strings may have been generated specifically
+ *  Because the sourceTree array and its strings may have been generated specifically
  *  for that event, they are not guaranteed to be valid after the callback has
  *  returned.  If you wish to use them after the callback returns, you need to
  *  make a deep copy.

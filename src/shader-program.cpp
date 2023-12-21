@@ -56,7 +56,7 @@ GLuint createShaderProgram(const char* vertexShaderSource, const char* fragmentS
 	return shaderProgram;
 }
 
-const char* readShaderFromFile(const std::string& shaderPath)
+const char* readShaderFromFile(const std::string &shaderPath)
 {
 	std::ifstream file(shaderPath);
 	if (!file) {
@@ -76,8 +76,8 @@ const char* readShaderFromFile(const std::string& shaderPath)
 }
 
 GLuint createShaderProgramUsingFile(                                                                                     // Reads vertex shader located in 'resources/shaders/vertexShaderName'
-        const std::string& vertexShaderAbsolutePath,                                                                     // and fragment shader located in 'resourcess/shaders/fragmentShaderName', then creates shader program from these shaders.
-        const std::string& fragmentShaderAbsolutePath
+        const std::string &vertexShaderAbsolutePath,                                                                     // and fragment shader located in 'resourcess/shaders/fragmentShaderName', then creates shader program from these shaders.
+        const std::string &fragmentShaderAbsolutePath
     )
 {
 	const char* vertexShaderSource = readShaderFromFile(vertexShaderAbsolutePath);

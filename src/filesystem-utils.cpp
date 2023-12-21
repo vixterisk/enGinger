@@ -3,29 +3,29 @@
 #include <iostream>
 #include <fstream>
 
-struct PathNode 
+struct SrcPathNode
 {
     std::string name;
-    PathNode *parent = nullptr;
-    std::vector<PathNode*> children;
+    SrcPathNode* parent = nullptr;
+    std::vector<SrcPathNode*> children;
 };
 
-class Path 
+class SourceTree
 {
 public:
-    PathNode *rootPath;
-    PathNode *resourcesPath;
-    PathNode *shadersPath;
-    PathNode *vertexShaderPath;
-    PathNode *fragmentShaderPath;
-    PathNode *configPath;
+    SrcPathNode* rootPath;
+    SrcPathNode* resourcesPath;
+    SrcPathNode* shadersPath;
+    SrcPathNode* vertexShaderPath;
+    SrcPathNode* fragmentShaderPath;
+    SrcPathNode* configPath;
 
-    bool isInitialized() { return rootPath != nullptr; }
-    PathNode *getResourcePath() const { return resourcesPath; }
-    PathNode *getShadersPath() const { return shadersPath; }
-    PathNode *getVertexShaderPath() const { return vertexShaderPath; }
-    PathNode *getFragmentShaderPath() const { return fragmentShaderPath; }
-    PathNode *getConfigPath() const { return configPath; }
+    bool isInitialized() const { return rootPath != nullptr; }
+    SrcPathNode *getResourcePath() const { return resourcesPath; }
+    SrcPathNode *getShadersPath() const { return shadersPath; }
+    SrcPathNode *getVertexShaderPath() const { return vertexShaderPath; }
+    SrcPathNode *getFragmentShaderPath() const { return fragmentShaderPath; }
+    SrcPathNode *getConfigPath() const { return configPath; }
 };
 
 std::map<PathNodeType, std::string> pathNodeName
@@ -35,14 +35,15 @@ std::map<PathNodeType, std::string> pathNodeName
     { PathNodeType::fragmentShader, "fragmentShader" }
 };
 
-Path path;
+SourceTree sourceTree;
 
-PathNode *createPath(std::string name, PathNode *parent) 
+SrcPathNode* createPath(std::string name, SrcPathNode *parent)
 {
-    PathNode *newPath = new PathNode();
+    SrcPathNode* newPath = new SrcPathNode();
     newPath->name = std::move(name);
     newPath->parent = parent;
-    if (parent) parent->children.push_back(newPath);
+    if (parent)
+        parent->children.push_back(newPath);
     return newPath;
 }
 
@@ -52,15 +53,13 @@ std::string getSrcPathEnvVar()
     char srcPath[pathBufferSize];
     const char* engingerSrcPath = "ENGINGER_SRC_PATH";
 
-    if (!getenv(engingerSrcPath))
-    {
+    if (!getenv(engingerSrcPath)) {
         std::cout << "The environment variable " << engingerSrcPath << " was not found.\n" << std::endl;
         exit(EXIT_FAILURE);
     }
 
-    if (snprintf(srcPath, pathBufferSize, "%s", getenv(engingerSrcPath)) >= pathBufferSize)
-    {
-        std::cout << "Path buffer size of " << pathBufferSize << " was too small. Aborting\n" << std::endl;
+    if (snprintf(srcPath, pathBufferSize, "%s", getenv(engingerSrcPath)) >= pathBufferSize) {
+        std::cout << "SourceTree buffer size of " << pathBufferSize << " was too small. Aborting\n" << std::endl;
         exit(EXIT_FAILURE);
     }
     return srcPath;
@@ -69,35 +68,34 @@ std::string getSrcPathEnvVar()
 void initializePath() 
 {
     std::string srcPath = getSrcPathEnvVar();
-    path.rootPath = createPath(srcPath, nullptr);
-    path.resourcesPath = createPath("resources", path.rootPath);
-    path.shadersPath = createPath("shaders", path.resourcesPath);
-    path.vertexShaderPath = nullptr;
-    path.fragmentShaderPath = nullptr;
-    path.configPath = createPath("config.json", path.rootPath);
+    sourceTree.rootPath = createPath(srcPath, nullptr);
+    sourceTree.vertexShaderPath = nullptr;
+    sourceTree.fragmentShaderPath = nullptr;
+    sourceTree.configPath = createPath("config.json", sourceTree.rootPath);
+    sourceTree.resourcesPath = createPath("resources", sourceTree.rootPath);
+    sourceTree.shadersPath = createPath("shaders", sourceTree.resourcesPath);
 }
 
 void addShaderPath(GLenum shaderType, const std::string& shaderName)
 {
-    if (!path.isInitialized())
+    if (!sourceTree.isInitialized())
         initializePath();
 
-    for (int i = 0; i < path.shadersPath->children.size(); i++)
-        if (path.shadersPath->children[i]->name == shaderName)
+    for (int i = 0; i < sourceTree.shadersPath->children.size(); i++)
+        if (sourceTree.shadersPath->children[i]->name == shaderName)
             return;
 
-    PathNode *shaderPathNode = createPath(shaderName, path.shadersPath);
+    SrcPathNode *shaderPathNode = createPath(shaderName, sourceTree.shadersPath);
     if (shaderType == GL_VERTEX_SHADER)
-        path.vertexShaderPath = shaderPathNode;
+        sourceTree.vertexShaderPath = shaderPathNode;
     else
-        path.fragmentShaderPath = shaderPathNode;
+        sourceTree.fragmentShaderPath = shaderPathNode;
 }
 
-std::string getAbsolutePath(PathNode* currPath, PathNodeType type)
+std::string getAbsolutePath(SrcPathNode* currPath, PathNodeType type)
 {
-    if (currPath == nullptr)
-    {
-        std::cout << "Path for " << pathNodeName[type] << " does not exist. Aborting... " << std::endl;
+    if (currPath == nullptr) {
+        std::cout << "SourceTree for " << pathNodeName[type] << " does not exist. Aborting... " << std::endl;
         exit(EXIT_FAILURE);
     }
 
@@ -113,23 +111,22 @@ std::string getAbsolutePath(PathNode* currPath, PathNodeType type)
 
 std::string getAbsolutePath(PathNodeType type) 
 {
-    if (!path.isInitialized())
+    if (!sourceTree.isInitialized())
         initializePath();
 
-    switch (type)
-    {
+    switch (type) {
         case configJson:
-            return getAbsolutePath(path.configPath, type);
+            return getAbsolutePath(sourceTree.configPath, type);
         case vertexShader:
-            return getAbsolutePath(path.vertexShaderPath, type);
+            return getAbsolutePath(sourceTree.vertexShaderPath, type);
         case fragmentShader:
-            return getAbsolutePath(path.fragmentShaderPath, type);
+            return getAbsolutePath(sourceTree.fragmentShaderPath, type);
         default:
             exit(EXIT_FAILURE);
     }
 }
 
-std::string getShaderAbsolutePath(GLenum shaderType, const std::string& vertexShaderName)
+std::string getShaderAbsolutePath(GLenum shaderType, const std::string &vertexShaderName)
 {
     PathNodeType ShaderPathNodeType;
     if (shaderType == GL_VERTEX_SHADER)
@@ -141,13 +138,12 @@ std::string getShaderAbsolutePath(GLenum shaderType, const std::string& vertexSh
     return getAbsolutePath(ShaderPathNodeType);
 }
 
-void deletePath(PathNode *&root)
+void deletePath(SrcPathNode* &root)
 {
     if (root == nullptr)
         return;
 
-    while (!root->children.empty())
-    {
+    while (!root->children.empty()) {
         deletePath(root->children.front());
         root->children.erase(root->children.begin());
     }
@@ -157,20 +153,20 @@ void deletePath(PathNode *&root)
 }
 
 void deletePath() {
-    deletePath(path.rootPath);
-    path.rootPath = nullptr;
-    path.resourcesPath = nullptr;
-    path.shadersPath = nullptr;
-    path.vertexShaderPath = nullptr;
-    path.fragmentShaderPath = nullptr;
-    path.configPath = nullptr;
+    deletePath(sourceTree.rootPath);
+    sourceTree.rootPath = nullptr;
+    sourceTree.resourcesPath = nullptr;
+    sourceTree.shadersPath = nullptr;
+    sourceTree.vertexShaderPath = nullptr;
+    sourceTree.fragmentShaderPath = nullptr;
+    sourceTree.configPath = nullptr;
 }
 
-template<class ConfigField>
-void readValue(nlohmann::json data, const std::string& jsonKey, ConfigField &result)
+template<class T>
+void readValue(nlohmann::json data, const std::string& jsonKey, T &result)
 {
     nlohmann::json value = data[jsonKey];
-    result = value.template get<ConfigField>();
+    result = value.template get<T>();
 }
 
 ConfigData getConfig()

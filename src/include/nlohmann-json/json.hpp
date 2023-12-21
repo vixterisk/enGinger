@@ -2143,7 +2143,7 @@ Exceptions have ids 5xx.
 
 name / id                      | example message | description
 ------------------------------ | --------------- | -------------------------
-json.exception.other_error.501 | unsuccessful: {"op":"test","path":"/baz", "value":"bar"} | A JSON Patch operation 'test' failed. The unsuccessful operation is also printed.
+json.exception.other_error.501 | unsuccessful: {"op":"test","sourceTree":"/baz", "value":"bar"} | A JSON Patch operation 'test' failed. The unsuccessful operation is also printed.
 
 @sa - @ref exception for the base class of the library exceptions
 @sa - @ref parse_error for exceptions indicating a parse error
@@ -22080,7 +22080,7 @@ class basic_json
     objects
 
     @throw parse_error.105 if the JSON patch is malformed (e.g., mandatory
-    attributes are missing); example: `"operation add must have member path"`
+    attributes are missing); example: `"operation add must have member sourceTree"`
 
     @throw out_of_range.401 if an array index is out of range.
 
@@ -22278,7 +22278,7 @@ class basic_json
 
             // collect mandatory members
             const std::string op = get_value("op", "op", true);
-            const std::string path = get_value(op, "path", true);
+            const std::string path = get_value(op, "sourceTree", true);
             json_pointer ptr(path);
 
             switch (get_op(op))
@@ -22297,7 +22297,7 @@ class basic_json
 
                 case patch_operations::replace:
                 {
-                    // the "path" location must exist - use at()
+                    // the "sourceTree" location must exist - use at()
                     result.at(ptr) = get_value("replace", "value", false);
                     break;
                 }
@@ -22339,8 +22339,8 @@ class basic_json
                     bool success = false;
                     JSON_TRY
                     {
-                        // check if "value" matches the one at "path"
-                        // the "path" location must exist - use at()
+                        // check if "value" matches the one at "sourceTree"
+                        // the "sourceTree" location must exist - use at()
                         success = (result.at(ptr) == get_value("test", "value", false));
                     }
                     JSON_INTERNAL_CATCH (out_of_range&)
@@ -22420,7 +22420,7 @@ class basic_json
             // different types: replace value
             result.push_back(
             {
-                {"op", "replace"}, {"path", path}, {"value", target}
+                {"op", "replace"}, {"sourceTree", path}, {"value", target}
             });
             return result;
         }
@@ -22451,7 +22451,7 @@ class basic_json
                     result.insert(result.begin() + end_index, object(
                     {
                         {"op", "remove"},
-                        {"path", path + "/" + std::to_string(i)}
+                        {"sourceTree", path + "/" + std::to_string(i)}
                     }));
                     ++i;
                 }
@@ -22462,7 +22462,7 @@ class basic_json
                     result.push_back(
                     {
                         {"op", "add"},
-                        {"path", path + "/" + std::to_string(i)},
+                        {"sourceTree", path + "/" + std::to_string(i)},
                         {"value", target[i]}
                     });
                     ++i;
@@ -22490,7 +22490,7 @@ class basic_json
                         // found a key that is not in o -> remove it
                         result.push_back(object(
                         {
-                            {"op", "remove"}, {"path", path + "/" + key}
+                            {"op", "remove"}, {"sourceTree", path + "/" + key}
                         }));
                     }
                 }
@@ -22504,7 +22504,7 @@ class basic_json
                         const auto key = json_pointer::escape(it.key());
                         result.push_back(
                         {
-                            {"op", "add"}, {"path", path + "/" + key},
+                            {"op", "add"}, {"sourceTree", path + "/" + key},
                             {"value", it.value()}
                         });
                     }
@@ -22518,7 +22518,7 @@ class basic_json
                 // both primitive type: replace value
                 result.push_back(
                 {
-                    {"op", "replace"}, {"path", path}, {"value", target}
+                    {"op", "replace"}, {"sourceTree", path}, {"value", target}
                 });
                 break;
             }

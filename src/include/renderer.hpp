@@ -3,17 +3,16 @@
 #include <cstdlib>
 #include "geometry/vertex-utils.hpp"
 
-// TODO make decent class hpp/cpp division
-class VertexArrayData
+class VertexArrayData                                                                                                    // TODO make decent class hpp/cpp division
 {
 private:
     int boundVAOCount;
     int boundVBOCount;
     int boundEBOCount;
 public:
-    GLuint *boundVAO;
-    GLuint *boundVBO;
-    GLuint *boundEBO;
+    GLuint* boundVAO;
+    GLuint* boundVBO;
+    GLuint* boundEBO;
     VertexArrayData(int VAOCount, int VBOCount, int EBOCount)
     {
         boundVAOCount = VAOCount;                                                                                        // A Vertex Array Object (or VAO) is an object that describes how the vertex attributes are stored in a Vertex Buffer Object (or VBO).
