@@ -3,7 +3,7 @@
 #include <cstdlib>
 #include "geometry/vertex-utils.hpp"
 
-// TODO perenesti
+// TODO make decent class hpp/cpp division
 class VertexArrayData
 {
 private:
