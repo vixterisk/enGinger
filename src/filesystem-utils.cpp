@@ -1,6 +1,7 @@
-#include "path.hpp"
+#include "filesystem-utils.hpp"
 #include <nlohmann-json/json.hpp>
 #include <iostream>
+#include <fstream>
 #include <utility>
 
 struct PathNode 
@@ -46,31 +47,6 @@ PathNode *createPath(std::string name, PathNode *parent)
     return newPath;
 }
 
-void deletePath(PathNode *&root)
-{
-    if (root == nullptr)
-        return;
-
-    while (root->children.size() != 0)
-    {
-        deletePath(root->children.front());
-        root->children.erase(root->children.begin());
-    }
-
-    delete(root);
-    root = nullptr;
-}
-
-void deletePath() { 
-    deletePath(path.rootPath);
-    path.rootPath = nullptr;
-    path.resourcesPath = nullptr;
-    path.shadersPath = nullptr;
-    path.vertexShaderPath = nullptr;
-    path.fragmentShaderPath = nullptr;
-    path.configPath = nullptr;
-}
-
 std::string getSrcPathEnvVar()
 {
     const unsigned short int pathBufferSize = 100;
@@ -102,8 +78,7 @@ void initializePath()
     path.configPath = createPath("config.json", path.rootPath);
 }
 
-
-void addShaderToPath(GLenum shaderType, const std::string& shaderName)
+void addShaderPath(GLenum shaderType, const std::string& shaderName)
 {
     if (!path.isInitialized())
         initializePath();
@@ -163,6 +138,55 @@ std::string getShaderAbsolutePath(GLenum shaderType, const std::string& vertexSh
     else
         ShaderPathNodeType = PathNodeType::fragmentShader;
 
-    addShaderToPath(shaderType, vertexShaderName);
+    addShaderPath(shaderType, vertexShaderName);
     return getAbsolutePath(ShaderPathNodeType);
+}
+
+void deletePath(PathNode *&root)
+{
+    if (root == nullptr)
+        return;
+
+    while (!root->children.empty())
+    {
+        deletePath(root->children.front());
+        root->children.erase(root->children.begin());
+    }
+
+    delete(root);
+    root = nullptr;
+}
+
+void deletePath() {
+    deletePath(path.rootPath);
+    path.rootPath = nullptr;
+    path.resourcesPath = nullptr;
+    path.shadersPath = nullptr;
+    path.vertexShaderPath = nullptr;
+    path.fragmentShaderPath = nullptr;
+    path.configPath = nullptr;
+}
+
+template<class ConfigField>
+void readValue(nlohmann::json data, const std::string& jsonKey, ConfigField &result)
+{
+    nlohmann::json value = data[jsonKey];
+    result = value.template get<ConfigField>();
+}
+
+ConfigData getConfig()
+{
+    using json = nlohmann::json;
+    ConfigData result;
+    std::string configAbsolutePath = getAbsolutePath(PathNodeType::configJson);
+    std::ifstream configFile(configAbsolutePath);
+    json data = json::parse(configFile);
+
+    readValue(data, "vertexShader", result.vertexShader);
+    readValue(data, "fragmentShader", result.fragmentShader);
+    readValue(data, "fullscreen", result.fullscreen);
+    readValue(data, "borderless", result.borderless);
+    readValue(data, "width", result.width);
+    readValue(data, "height", result.height);
+    return result;
 }

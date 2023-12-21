@@ -1,8 +1,7 @@
 #include <windows.h>
 #include "glfw-utils.hpp"
 #include "renderer.hpp"
-#include "config-data.hpp"
-#include "path.hpp"
+#include "filesystem-utils.hpp"
 #include "shader-program.hpp"
 
 /* vertices within Normalized Device Coordinates (NDC) range
@@ -38,7 +37,7 @@ int main(int, char*[])
 
     initGLFW();
 
-    ConfigData data = readConfig();
+    ConfigData data = getConfig();
 
     GLFWwindow* window = createWindow("enGinger", data.fullscreen, data.borderless, data.width, data.height);
     exitWhenNull(!window, "Failed to create GLFW window.");
