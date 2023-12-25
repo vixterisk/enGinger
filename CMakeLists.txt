@@ -2,10 +2,12 @@ cmake_minimum_required(VERSION 3.2)
 project(ENginger)
 
 set(PROJECT_NAME ENginger)
+
 set(SOURCE_PATH src)
+set(HEADER_PATH include)
+set(LIBRARY_PATH lib)
+
 set(SOURCE_FILES "${SOURCE_PATH}/main.cpp" "${SOURCE_PATH}/shader-program.cpp" "${SOURCE_PATH}/glfw-utils.cpp" "${SOURCE_PATH}/renderer.cpp" "${SOURCE_PATH}/glad.c" "${SOURCE_PATH}/filesystem-utils.cpp")
-set(HEADER_PATH "${SOURCE_PATH}/include")
-set(LIBRARY_PATH "${SOURCE_PATH}/lib")
 
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 
