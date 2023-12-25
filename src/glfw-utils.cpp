@@ -14,6 +14,14 @@ void exitWhenNull(bool isNull, const std::string& errorMessage)
     }
 }
 
+template<class T>
+void checkNotNull(T value, const char* &errorMessage)
+{
+    if (value) {
+        throw std::exception(errorMessage);
+    }
+}
+
 void errorCallback(int, const char* desc)
 {
     fputs(desc, stderr);
@@ -72,7 +80,12 @@ GLFWwindow* createWindow(const char* windowName, bool isFullscreen, bool isBorde
         monitor = nullptr;
 
     GLFWwindow* window = glfwCreateWindow(width, height, windowName, monitor, nullptr);
-    exitWhenNull(!window, "::Failed to create GLFW window");
+    try {
+        checkNotNull(window, (const char *&) "::Failed to create GLFW window");
+    }
+    catch(const std::exception &e) {
+        std::cout << e.what() << "\n";
+    }
 
     glfwMakeContextCurrent(window);                                                                                     // In order for any OpenGL commands to work, a context must be current.
     if (!isFullscreen) {
