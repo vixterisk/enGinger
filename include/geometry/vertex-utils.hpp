@@ -1,3 +1,5 @@
+#include <glad/glad.h>
+
 struct Position
 {
     GLfloat x;

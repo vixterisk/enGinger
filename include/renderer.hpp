@@ -1,24 +1,23 @@
-#include <glad/glad.h>
+#include "geometry/vertex-utils.hpp"
 #include <vector>
 #include <cstdlib>
-#include "geometry/vertex-utils.hpp"
 
-// TODO perenesti
-class VertexArrayData
+class VertexArrayData                                                                                                    // TODO make decent class hpp/cpp division
 {
 private:
     int boundVAOCount;
     int boundVBOCount;
     int boundEBOCount;
 public:
-    GLuint *boundVAO;
-    GLuint *boundVBO;
-    GLuint *boundEBO;
+    GLuint* boundVAO;
+    GLuint* boundVBO;
+    GLuint* boundEBO;
+
     VertexArrayData(int VAOCount, int VBOCount, int EBOCount)
     {
-        boundVAOCount = VAOCount;
-        boundVBOCount = VBOCount;
-        boundEBOCount = EBOCount;
+        boundVAOCount = VAOCount;                                                                                        // A Vertex Array Object (or VAO) is an object that describes how the vertex attributes are stored in a Vertex Buffer Object (or VBO).
+        boundVBOCount = VBOCount;                                                                                        // Vertex buffer object provides methods for uploading vertex data (position, normal vector, color, etc.).
+        boundEBOCount = EBOCount;                                                                                        // Element buffer object allows to reuse vertex data without duplicating all attributes values.
         boundVAO = (GLuint*)malloc(VAOCount * sizeof(GLuint));
         boundVBO = (GLuint*)malloc(VBOCount * sizeof(GLuint));
         boundEBO = (GLuint*)malloc(EBOCount * sizeof(GLuint));
@@ -40,8 +39,8 @@ public:
 
 VertexArrayData getVertexArrayData(std::vector<Vertex> vertices, std::vector<GLuint> indices);
 
-void clearAllBuffers();
-
 void draw(GLuint shaderProgram, GLuint VAO, int ElementsCount);
 
 void cleanGlResources(VertexArrayData vertexArrayData, GLuint shaderProgram);
+
+void clearAllBuffers();
