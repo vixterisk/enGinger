@@ -80,12 +80,12 @@ GLFWwindow* createWindow(const char* windowName, bool isFullscreen, bool isBorde
         monitor = nullptr;
 
     GLFWwindow* window = glfwCreateWindow(width, height, windowName, monitor, nullptr);
-    try {
-        checkNotNull(window, (const char *&) "::Failed to create GLFW window");
-    }
-    catch(const std::exception &e) {
-        std::cout << e.what() << "\n";
-    }
+    //try {
+    //    checkNotNull(window, (const char *&) "::Failed to create GLFW window");
+    //}
+    //catch(const std::exception &e) {
+    //    std::cout << e.what() << "\n";
+    //}
 
     glfwMakeContextCurrent(window);                                                                                     // In order for any OpenGL commands to work, a context must be current.
     if (!isFullscreen) {
