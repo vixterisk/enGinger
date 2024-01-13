@@ -1,7 +1,9 @@
 #include "geometry/vertex-utils.hpp"
+#include <glfw/glfw3.h>
 #include <vector>
 #include <cstdlib>
 
+// Rewrite and move to cpp
 class VertexArrayData                                                                                                    // TODO make decent class hpp/cpp division
 {
 private:

@@ -41,6 +41,13 @@ void clearAllBuffers()
 void draw(GLuint shaderProgram, GLuint VAO, int ElementsCount)
 {
     glUseProgram(shaderProgram);
+
+    // update the uniform color
+    GLfloat timeValue = glfwGetTime();
+    GLfloat normalizedValue = timeValue;
+    GLint vertexColorLocation = glGetUniformLocation(shaderProgram, "uniformColor");
+    glUniform1f(vertexColorLocation, normalizedValue);
+
     glBindVertexArray(VAO);
     glDrawElements(GL_TRIANGLES, ElementsCount, GL_UNSIGNED_INT, 0);                                                     // Primitives is an interpretation scheme used by OpenGL to determine what a stream of vertices represents when being rendered e.g. "GL_POINTS".
 }
