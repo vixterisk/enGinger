@@ -34,15 +34,21 @@ int main(int, char*[])
     };
 
     initGLFW();
-    ConfigData data = getConfig();
-    GLFWwindow* window = createWindow("enGinger", data.fullscreen, data.borderless, data.width, data.height);
+    ConfigData configData = getConfig();
+    GLFWwindow* window = createWindow(
+            "enGinger",
+            configData.isFullscreen,
+            configData.isBorderless,
+            configData.width,
+            configData.height
+            );
     exitWhenNull(!window, "Failed to create GLFW window.");
 
     VertexArrayData vertexArrayData = getVertexArrayData(vertices, indices);
     exitWhenNull(!vertexArrayData.boundVAO, "Failed to create Vertex Array Object.");
 
-    std::string vertexShaderPath = getShaderAbsolutePath(GL_VERTEX_SHADER, data.vertexShader);
-    std::string fragmentShaderPath = getShaderAbsolutePath(GL_FRAGMENT_SHADER, data.fragmentShader);
+    std::string vertexShaderPath = getShaderAbsolutePath(GL_VERTEX_SHADER, configData.vertexShader);
+    std::string fragmentShaderPath = getShaderAbsolutePath(GL_FRAGMENT_SHADER, configData.fragmentShader);
     GLuint shaderProgram = createShaderProgramUsingFile(vertexShaderPath, fragmentShaderPath);
     exitWhenNull(!shaderProgram, "Failed to create shader program.");
     glUseProgram(shaderProgram);

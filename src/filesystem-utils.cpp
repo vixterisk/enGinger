@@ -179,8 +179,8 @@ ConfigData getConfig()
 
     readValue(data, "vertexShader", result.vertexShader);
     readValue(data, "fragmentShader", result.fragmentShader);
-    readValue(data, "fullscreen", result.fullscreen);
-    readValue(data, "borderless", result.borderless);
+    readValue(data, "fullscreen", result.isFullscreen);
+    readValue(data, "borderless", result.isBorderless);
     readValue(data, "width", result.width);
     readValue(data, "height", result.height);
     return result;

@@ -4,11 +4,12 @@ project(ENginger)
 set(PROJECT_NAME ENginger)
 
 set(SOURCE_PATH src)
+set(THIRD_PARTY_SOURCE_PATH "src/third-party")
 set(HEADER_PATH include)
 set(THIRD_PARTY_HEADER_PATH "include/third-party")
 set(LIBRARY_PATH lib)
 
-set(SOURCE_FILES "${SOURCE_PATH}/main.cpp" "${SOURCE_PATH}/shader-program.cpp" "${SOURCE_PATH}/glfw-utils.cpp" "${SOURCE_PATH}/renderer.cpp" "${SOURCE_PATH}/glad.c" "${SOURCE_PATH}/filesystem-utils.cpp")
+set(SOURCE_FILES "${SOURCE_PATH}/main.cpp" "${SOURCE_PATH}/shader-program.cpp" "${SOURCE_PATH}/glfw-utils.cpp" "${SOURCE_PATH}/renderer.cpp" "${THIRD_PARTY_SOURCE_PATH}/glad.c" "${SOURCE_PATH}/filesystem-utils.cpp")
 
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 

@@ -14,15 +14,15 @@ std::map<GLuint , std::string> shaderTypeName
 
 unsigned int createShader(GLenum shaderType, const char* shaderSource)                                                   // Creates glsl shader needed type from given shader source code.
 {
-	unsigned int shader = glCreateShader(shaderType);                                                                    // Creates an empty shader object and returns a non-zero value by which it can be referenced.
-	glShaderSource(shader, 1, &shaderSource, nullptr);                                                                   // Replaces the source code in a shader object.
+	unsigned int shader = glCreateShader(shaderType);                                                               // Creates an empty shader object and returns a non-zero value by which it can be referenced.
+	glShaderSource(shader, 1, &shaderSource, nullptr);                                                 // Replaces the source code in a shader object.
     glCompileShader(shader);                                                                                             // Compiles a shader object with compilation status stored as part of the shader object's state (GL_COMPILE_STATUS).
 
     int  success;
-	glGetShaderiv(shader, GL_COMPILE_STATUS, &success);                                                                  // Reads parameter GL_COMPILE_STATUS value from shader into success.
+	glGetShaderiv(shader, GL_COMPILE_STATUS, &success);                                                    // Reads parameter GL_COMPILE_STATUS value from shader into success.
 	if (!success) {
         char infoLog[512];
-		glGetShaderInfoLog(shader, 512, nullptr, infoLog);                                                               // Returns the shader object's information log modified when the shader is compiled.
+		glGetShaderInfoLog(shader, 512, nullptr, infoLog);                                                 // Returns the shader object's information log modified when the shader is compiled.
 		std::cout << "::" << shaderTypeName[shaderType] << ": compilation failed\n" << infoLog << std::endl;
 		return 0;
 	}
@@ -36,9 +36,9 @@ GLuint createShaderProgram(const char* vertexShaderSource, const char* fragmentS
 	unsigned int fragmentShader = createShader(GL_FRAGMENT_SHADER, fragmentShaderSource);
 	unsigned int shaderProgram = glCreateProgram();                                                                      // Creates shader program object and get its ID.
 
-	glAttachShader(shaderProgram, vertexShader);                                                                         // Any number of shader objects can be attached at once as long as they have a different shader type.
+	glAttachShader(shaderProgram, vertexShader);                                                          // Any number of shader objects can be attached at once as long as they have a different shader type.
 	glAttachShader(shaderProgram, fragmentShader);
-	glLinkProgram(shaderProgram);                                                                                   	 // This step puts all shaders together and matches each output to each input.
+	glLinkProgram(shaderProgram);                                                                                // This step puts all shaders together and matches each output to each input.
                                                                                                                          // The status of the link operation will be stored as part of the program object's state (GL_LINK_STATUS), and can fail for a number of reasons.
     int  success;                                                                                                        // more information can be obtained at https://registry.khronos.org/OpenGL-Refpages/gl4/html/glLinkProgram.xhtml
 	glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);

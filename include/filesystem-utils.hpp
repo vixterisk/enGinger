@@ -5,8 +5,8 @@ struct ConfigData
 {
     std::string vertexShader;
     std::string fragmentShader;
-    bool fullscreen;
-    bool borderless;
+    bool isFullscreen;
+    bool isBorderless;
     int width;
     int height;
 };
