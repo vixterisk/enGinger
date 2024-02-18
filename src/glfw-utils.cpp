@@ -1,26 +1,7 @@
 #include "glfw-utils.hpp"
 #include "filesystem-utils.hpp"
 #include "geometry/vertex-utils.hpp"
-#include <iostream>
 #include <vector>
-
-void exitWhenNull(bool isNull, const std::string& errorMessage)
-{
-    if (isNull) {
-        if (!errorMessage.empty())
-            std::cout << errorMessage << "\n";
-        glfwTerminate();
-        exit(EXIT_FAILURE);
-    }
-}
-
-template<class T>
-void checkNotNull(T value, const char* &errorMessage)
-{
-    if (value) {
-        throw std::exception(errorMessage);
-    }
-}
 
 void errorCallback(int, const char* desc)
 {
@@ -98,8 +79,11 @@ GLFWwindow* createWindow(const char* windowName, bool isFullscreen, bool isBorde
 //#else
 
     /* GLFW returns glfwGetProcAddress that defines the correct function based on which OS we're compiling for. */
-    exitWhenNull(!window, "::Failed to create GLFW window");
-    exitWhenNull(!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress), "::Failed to initialize GLAD");
+    auto errorHandler = []() { glfwTerminate(); };
+    window = checkNotNull(window, errorHandler, "::Failed to create GLFW window");
+    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
+        throw std::exception("::Failed to initialize GLAD");
+    }
 //#endif
     setViewport(width, height);
 

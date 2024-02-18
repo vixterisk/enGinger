@@ -42,15 +42,16 @@ int main(int, char*[])
             configData.width,
             configData.height
             );
-    exitWhenNull(!window, "Failed to create GLFW window.");
+    auto errorHandler = []() { glfwTerminate(); };
+    window = checkNotNull(window, errorHandler, "::Failed to create GLFW window");
 
     VertexArrayData vertexArrayData = getVertexArrayData(vertices, indices);
-    exitWhenNull(!vertexArrayData.boundVAO, "Failed to create Vertex Array Object.");
+    vertexArrayData = checkNotNull(vertexArrayData, errorHandler, "Failed to create Vertex Array Object.");
 
     std::string vertexShaderPath = getShaderAbsolutePath(GL_VERTEX_SHADER, configData.vertexShader);
     std::string fragmentShaderPath = getShaderAbsolutePath(GL_FRAGMENT_SHADER, configData.fragmentShader);
     GLuint shaderProgram = createShaderProgramUsingFile(vertexShaderPath, fragmentShaderPath);
-    exitWhenNull(!shaderProgram, "Failed to create shader program.");
+    shaderProgram = checkNotNull(shaderProgram, errorHandler, "Failed to create shader program.");
     glUseProgram(shaderProgram);
 
     ShowWindow(GetConsoleWindow(), SW_HIDE);
