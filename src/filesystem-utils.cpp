@@ -21,11 +21,11 @@ public:
     SrcPathNode* configPath;
 
     bool isInitialized() const { return rootPath != nullptr; }
-    SrcPathNode *getResourcePath() const { return resourcesPath; }
-    SrcPathNode *getShadersPath() const { return shadersPath; }
-    SrcPathNode *getVertexShaderPath() const { return vertexShaderPath; }
-    SrcPathNode *getFragmentShaderPath() const { return fragmentShaderPath; }
-    SrcPathNode *getConfigPath() const { return configPath; }
+    SrcPathNode* getResourcePath() const { return resourcesPath; }
+    SrcPathNode* getShadersPath() const { return shadersPath; }
+    SrcPathNode* getVertexShaderPath() const { return vertexShaderPath; }
+    SrcPathNode* getFragmentShaderPath() const { return fragmentShaderPath; }
+    SrcPathNode* getConfigPath() const { return configPath; }
 };
 
 std::map<PathNodeType, std::string> pathNodeName
