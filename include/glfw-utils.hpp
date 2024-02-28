@@ -6,10 +6,7 @@ void initGLFW();
 
 GLFWwindow* createWindow(const char* windowName, bool isFullscreen, bool isBorderless, int width, int height);
 
-template<class T, class F>
-T checkNotNull(T value, F errorHandler = {}, std::string errorMessage = "");
+template<class F>
+void checkCondition(bool condition, F errorHandler = {}, std::string errorMessage = "");
 
-template<class T, class F>
-T* checkNotNull(T* value, F errorHandler = {}, std::string errorMessage = "");
-
-#include "check-not-null.tpp"
+#include "check-condition.tpp"

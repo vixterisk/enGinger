@@ -43,15 +43,13 @@ int main(int, char*[])
             configData.height
             );
     auto errorHandler = []() { glfwTerminate(); };
-    window = checkNotNull(window, errorHandler, "::Failed to create GLFW window");
+    checkCondition(window != nullptr, errorHandler, "::Failed to create GLFW window");
 
     VertexArrayData vertexArrayData = getVertexArrayData(vertices, indices);
-    vertexArrayData = checkNotNull(vertexArrayData, errorHandler, "Failed to create Vertex Array Object.");
-
     std::string vertexShaderPath = getShaderAbsolutePath(GL_VERTEX_SHADER, configData.vertexShader);
     std::string fragmentShaderPath = getShaderAbsolutePath(GL_FRAGMENT_SHADER, configData.fragmentShader);
     GLuint shaderProgram = createShaderProgramUsingFile(vertexShaderPath, fragmentShaderPath);
-    shaderProgram = checkNotNull(shaderProgram, errorHandler, "Failed to create shader program.");
+    checkCondition(shaderProgram != 0, errorHandler, "Failed to create shader program.");
     glUseProgram(shaderProgram);
 
     ShowWindow(GetConsoleWindow(), SW_HIDE);

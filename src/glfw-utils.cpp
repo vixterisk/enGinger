@@ -80,7 +80,7 @@ GLFWwindow* createWindow(const char* windowName, bool isFullscreen, bool isBorde
 
     /* GLFW returns glfwGetProcAddress that defines the correct function based on which OS we're compiling for. */
     auto errorHandler = []() { glfwTerminate(); };
-    window = checkNotNull(window, errorHandler, "::Failed to create GLFW window");
+    checkCondition(window != nullptr, errorHandler, "::Failed to create GLFW window");
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
         throw std::exception("::Failed to initialize GLAD");
     }
