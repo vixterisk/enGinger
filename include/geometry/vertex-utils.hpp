@@ -6,12 +6,7 @@ struct Position
     GLfloat y;
     GLfloat z;
 
-    Position(GLfloat _x = 0.0f, GLfloat _y = 0.0f, GLfloat _z = 0.0f)
-    {
-        x = _x;
-        y = _y;
-        z = _z;
-    }
+    Position(GLfloat _x = 0.0f, GLfloat _y = 0.0f, GLfloat _z = 0.0f) : x{ _x }, y{ _y }, z{ _z } {}
 };
 
 struct Color
@@ -38,11 +33,7 @@ struct UV
 {
     GLfloat u;
     GLfloat v;
-    UV(GLfloat _u = 0.0f, GLfloat _v = 0.0f)
-    {
-        u = _u;
-        v = _v;
-    }
+    UV(GLfloat _u = 0.0f, GLfloat _v = 0.0f) : u{ _u }, v{ _v } {}
 };
 
 struct Vertex
@@ -53,12 +44,7 @@ struct Vertex
     Position normals;
 
     Vertex(Position _position, Color _color, UV _uv, Position _normals)
-    {
-        position = _position;
-        color = _color;
-        uv = _uv;
-        normals = _normals;
-    }
+        : position{ _position } , color{ _color }, uv{ _uv }, normals{ _normals } {}
     //static Layout[] getLayout() {
     //    retun Layout[] = {
     //        {3, GL_FLOAT, false}
