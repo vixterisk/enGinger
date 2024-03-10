@@ -75,17 +75,33 @@ const char* readShaderFromFile(const std::string &shaderPath)
 	return result;
 }
 
-GLuint createShaderProgramUsingFile(                                                                                     // Reads vertex shader located in 'resources/shaders/vertexShaderName'
-        const std::string &vertexShaderAbsolutePath,                                                                     // and fragment shader located in 'resourcess/shaders/fragmentShaderName', then creates shader program from these shaders.
-        const std::string &fragmentShaderAbsolutePath
-    )
+ShaderProgram::ShaderProgram(const std::string &vertexShaderAbsolutePath, const std::string &fragmentShaderAbsolutePath)
 {
-	const char* vertexShaderSource = readShaderFromFile(vertexShaderAbsolutePath);
-	const char* fragmentShaderSource = readShaderFromFile(fragmentShaderAbsolutePath);
+    const char* vertexShaderSource = readShaderFromFile(vertexShaderAbsolutePath);
+    const char* fragmentShaderSource = readShaderFromFile(fragmentShaderAbsolutePath);
 
-	if (vertexShaderSource == nullptr || fragmentShaderSource == nullptr)
-		return 0;
+    if (vertexShaderSource == nullptr || fragmentShaderSource == nullptr)
+        ID = 0;
+    else
+        ID = createShaderProgram(vertexShaderSource, fragmentShaderSource);
+}
 
-	GLuint shaderProgram = createShaderProgram(vertexShaderSource, fragmentShaderSource);
-	return shaderProgram;
+void ShaderProgram::setBool(const std::string &name, bool value) const
+{
+
+}
+
+void ShaderProgram::setInt(const std::string &name, int value) const
+{
+
+}
+
+void ShaderProgram::setFloat(const std::string &name, float value) const
+{
+
+}
+
+void ShaderProgram::use()
+{
+
 }

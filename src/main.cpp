@@ -48,20 +48,20 @@ int main(int, char*[])
     VertexArrayData vertexArrayData = getVertexArrayData(vertices, indices);
     std::string vertexShaderPath = getShaderAbsolutePath(GL_VERTEX_SHADER, configData.vertexShader);
     std::string fragmentShaderPath = getShaderAbsolutePath(GL_FRAGMENT_SHADER, configData.fragmentShader);
-    GLuint shaderProgram = createShaderProgramUsingFile(vertexShaderPath, fragmentShaderPath);
-    checkCondition(shaderProgram != 0, errorHandler, "Failed to create shader program.");
-    glUseProgram(shaderProgram);
+    ShaderProgram shaderProgram = ShaderProgram(vertexShaderPath, fragmentShaderPath);
+    checkCondition(shaderProgram.ID != 0, errorHandler, "Failed to create shader program.");
+    glUseProgram(shaderProgram.ID);
 
     ShowWindow(GetConsoleWindow(), SW_HIDE);
     while (!glfwWindowShouldClose(window)) {
         clearAllBuffers();
-        draw(shaderProgram, *vertexArrayData.boundVAO, indices.size());
+        draw(shaderProgram.ID, *vertexArrayData.boundVAO, indices.size());
         glfwPollEvents();                                                                                                // This function processes only those events that are already in the event queue and then returns immediately. Processing events will cause the window and input callbacks associated with those events to be called.
         glfwSwapBuffers(window);                                                                                         // Swaps the front and back buffers of the specified window that are used to prevent screen tearing.
     }
     ShowWindow(GetConsoleWindow(), SW_RESTORE);
 
-    cleanGlResources(vertexArrayData, shaderProgram);
+    cleanGlResources(vertexArrayData, shaderProgram.ID);
     glfwDestroyWindow(window);
     glfwTerminate();
     deletePath();
